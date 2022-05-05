@@ -10,12 +10,10 @@ public class App {
     private static final BookDao BOOK_DAO = new BookDaoJdbcImpl();
 
     public static void main(String[] args) throws Exception {
-
-        Scanner in = new Scanner(System.in);
         boolean process = true;
         while(process) {
             System.out.println("conditon : all, id, create, update, delete, isbn, author, count or exit (for exit program)");
-
+            Scanner in = new Scanner(System.in);
             String input = in.next().toLowerCase().trim();
             switch (input) {
                 case "all":
