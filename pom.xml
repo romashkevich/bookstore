@@ -6,7 +6,7 @@
     <artifactId>bookstore</artifactId>
     <version>1.0</version>
 
-    <build>
+    <!--<build>
         <resources>
             <resource>
                 <directory>src/resources</directory>
@@ -39,7 +39,7 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -51,7 +51,22 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.3.4</version>
+            <type>maven-plugin</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
 </project>
