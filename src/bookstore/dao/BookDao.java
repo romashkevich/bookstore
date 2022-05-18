@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface BookDao {// CRUD репозиторий
-    String hh = "g";
+
     List<Book> getAllBooks();
     Book getBookById(Long id) throws SQLException;
 

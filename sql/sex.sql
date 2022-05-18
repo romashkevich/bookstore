@@ -1,0 +1,8 @@
+CREATE TABLE sex(
+	sex_id BIGSERIAL PRIMARY KEY,
+	sex_name VARCHAR(5) UNIQUE NOT NULL
+);
+
+INSERT INTO sex(sex_name) VALUES
+('MAN'),
+('WOMAN');

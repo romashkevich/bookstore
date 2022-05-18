@@ -1,6 +1,6 @@
 package bookstore.dao;
 
-import bookstore.DbConfigurator;
+import bookstore.dbservicebooks.DbConfiguratorBooks;
 import bookstore.dao.entity.Book;
 
 import java.sql.PreparedStatement;
@@ -28,7 +28,7 @@ public class BookDaoJdbcImpl implements BookDao{
     public List<Book> getAllBooks()  {
         List<Book> books = new ArrayList<>();
         try{
-            Statement statement = DbConfigurator.getConnection().createStatement();
+            Statement statement = DbConfiguratorBooks.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(GET_ALL);
             while(resultSet.next()) {
                 Book book = new Book();
@@ -50,7 +50,7 @@ public class BookDaoJdbcImpl implements BookDao{
     public Book getBookById(Long id) throws SQLException {
         Book book = null;
         try {
-            PreparedStatement statement = DbConfigurator.getConnection().prepareStatement(SELECT_GET_ID);
+            PreparedStatement statement = DbConfiguratorBooks.getConnection().prepareStatement(SELECT_GET_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -72,14 +72,14 @@ public class BookDaoJdbcImpl implements BookDao{
 
     @Override
     public Book createBook(Book book) throws SQLException {
-        PreparedStatement statement = DbConfigurator.getConnection().prepareStatement(SELECT_ISBN);
+        PreparedStatement statement = DbConfiguratorBooks.getConnection().prepareStatement(SELECT_ISBN);
         statement.setString(1, book.getIsbn());
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             throw new SQLException("sorry, book with isbn in db");
         } else {
             try {
-                PreparedStatement preparedStatement = DbConfigurator.getConnection().prepareStatement(CREATE_BOOK);
+                PreparedStatement preparedStatement = DbConfiguratorBooks.getConnection().prepareStatement(CREATE_BOOK);
                 preparedStatement.setString(1, book.getIsbn());
                 preparedStatement.setString(2, book.getTitle());
                 preparedStatement.setString(3, book.getAuthor());
@@ -97,12 +97,12 @@ public class BookDaoJdbcImpl implements BookDao{
 
     @Override
     public Book updateBook(Book book) throws SQLException {
-        PreparedStatement statement = DbConfigurator.getConnection().prepareStatement(SELECT_ISBN);
+        PreparedStatement statement = DbConfiguratorBooks.getConnection().prepareStatement(SELECT_ISBN);
         statement.setString(1, book.getIsbn());
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             try {
-                PreparedStatement preparedStatement = DbConfigurator.getConnection().prepareStatement(UPDATE_BOOK);
+                PreparedStatement preparedStatement = DbConfiguratorBooks.getConnection().prepareStatement(UPDATE_BOOK);
                 preparedStatement.setString(1, book.getTitle());
                 preparedStatement.setString(2, book.getAuthor());
                 preparedStatement.setInt(3, book.getPages());
@@ -124,11 +124,11 @@ public class BookDaoJdbcImpl implements BookDao{
     @Override
     public boolean deleteBook(Long id) throws SQLException {
             boolean statusOperation = false;
-            PreparedStatement statement = DbConfigurator.getConnection().prepareStatement(SELECT_BY_ID);
+            PreparedStatement statement = DbConfiguratorBooks.getConnection().prepareStatement(SELECT_BY_ID);
             statement.setLong(1, id);
             if (statement.executeQuery().next()) {
                 try {
-                    PreparedStatement preparedStatement = DbConfigurator.getConnection().prepareStatement(DELETE_BY_ID);
+                    PreparedStatement preparedStatement = DbConfiguratorBooks.getConnection().prepareStatement(DELETE_BY_ID);
                     preparedStatement.setLong(1,id);
                     preparedStatement.executeUpdate();
                     System.out.println("congratulation, book is deleted");
@@ -150,7 +150,7 @@ public class BookDaoJdbcImpl implements BookDao{
         Book book = null;
         if (result) {
             try {
-                PreparedStatement statement = DbConfigurator.getConnection().prepareStatement(GET_BY_ISBN);
+                PreparedStatement statement = DbConfiguratorBooks.getConnection().prepareStatement(GET_BY_ISBN);
                 statement.setString(1, isbn);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
@@ -191,7 +191,7 @@ public class BookDaoJdbcImpl implements BookDao{
 
     @Override
     public int countAllBooks() throws SQLException {
-        Statement statement = DbConfigurator.getConnection().createStatement();
+        Statement statement = DbConfiguratorBooks.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT count(id) FROM books WHERE deleted=false");
         int count=0;
         if (resultSet.next())
