@@ -19,7 +19,9 @@ public interface UserDao {
 
     User getUserByEmail(String email) throws SQLException;
 
-    List<User> getUsersByLastName(String firstName);
+    List<User> getUsersByLastName(String firstName) throws SQLException;
 
     int countAllUsers() throws SQLException;
+
+    User getUserByLogin (String login) throws SQLException;
 }

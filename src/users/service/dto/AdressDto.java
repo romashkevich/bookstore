@@ -1,47 +1,46 @@
-package users.dao.entity;
+package users.service.dto;
 
 import java.util.Objects;
 
-public class Adress {
-
+public class AdressDto {
+    private int id;
     private String country;
     private String city;
     private String street;
     private int strNum;
     private int apart;
-    public Adress(){}
-    public Adress(String country, String city, String street, int strNum, int apart) {
-        this.country = country;
-        this.city = city;
-        this.street = street;
-        this.strNum = strNum;
-        this.apart = apart;
+
+    @Override
+    public String toString() {
+        return "AdressDto{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", strNum=" + strNum +
+                ", apart=" + apart +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Adress adress = (Adress) o;
-        return strNum == adress.strNum && apart == adress.apart && Objects.equals(country, adress.country) && Objects.equals(city, adress.city) && Objects.equals(street, adress.street);
+        AdressDto adressDto = (AdressDto) o;
+        return id == adressDto.id && strNum == adressDto.strNum && apart == adressDto.apart && Objects.equals(country, adressDto.country) && Objects.equals(city, adressDto.city) && Objects.equals(street, adressDto.street);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(country, city, street, strNum, apart);
+        return Objects.hash(id, country, city, street, strNum, apart);
     }
 
+    public int getId() {
+        return id;
+    }
 
-
-    @Override
-    public String toString() {
-        return "Adress {" +
-                " country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", strNum=" + strNum +
-                ", apart=" + apart +
-                '}';
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCountry() {

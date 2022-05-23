@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 //dao - data access object / / объект доступа к данным
 
 public class BookDaoJdbcImpl implements BookDao{
-    public String jj = "j";
+
     public static final String SELECT_ISBN = "SELECT * FROM books WHERE isbn =? AND deleted = false";
     public static final String GET_ALL = "SELECT * FROM books WHERE deleted = false";
     public static final String SELECT_GET_ID = "SELECT * FROM books WHERE id =? AND deleted = false";

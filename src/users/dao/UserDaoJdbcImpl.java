@@ -1,8 +1,10 @@
 package users.dao;
 
+import bookstore.dao.entity.Book;
 import users.dao.entity.Adress;
 import users.dao.entity.Sex;
 import users.dao.entity.User;
+import users.dao.entity.Role;
 import users.dbserviceusers.DbConfiguratorUsers;
 
 import java.sql.PreparedStatement;
@@ -12,27 +14,28 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class UserDaoJdbcImpl implements UserDao{
     public static final String SELECT_USERS = "SELECT * FROM users WHERE deleted = false";
     public static final String SELECT_SEX = "SELECT * FROM sex WHERE  sex_id = ? ";
     public static final String SELECT_ADRESS_ID = "SELECT * FROM adress WHERE adress_id = ?";
-    public static final String SELECT_ADRESS_ID_2 = "SELECT adress_id FROM users WHERE login = ?";
+    public static final String SELECT_ADRESS_ID_2 = "SELECT adress_id FROM users WHERE login = ? AND deleted = false";
     public static final String SELECT_MAX_ADRESS_ID = "SELECT MAX(adress_id) FROM adress";
     public static final String SELECT_ID = "SELECT * FROM users WHERE id = ? AND deleted = false";
-    public static final String SELECT_EMAIL = "SELECT * FROM users WHERE email = ? AND deleted = false";
-    public static final String UPDATE_USER =
-            "UPDATE users SET pass = ?, firstname=?, lastname=?, telnumber=?, sex_id=? WHERE login=?";
-    public static final String UPDATE_ADRESS =
-            "UPDATE adress SET country = ?, city=?, street=?, strNum=?, apart=? WHERE adress_id=?";
     public static final String SELECT_LOGIN = "SELECT * FROM users WHERE login = ? AND deleted = false";
+    public static final String UPDATE_USER = "UPDATE users SET role_id=?, pass = ?, firstname=?, lastname=?, telnumber=?, sex_id=? WHERE login=?";
+    public static final String UPDATE_ADRESS = "UPDATE adress SET country = ?, city=?, street=?, strNum=?, apart=? WHERE adress_id=?";
     public static final String INSERT_ADRESS = "INSERT INTO adress (country, city, street, strNum, apart) VALUES(?,?,?,?,?)";
-    public static final String CREATE_USER =
-            "INSERT INTO users (login, email, pass, firstname, lastname, adress_id, telnumber, sex_id) VALUES(?,?,?,?,?,?,?,?)";
+    public static final String CREATE_USER = "INSERT INTO users (role_id, login, email, pass, firstname, lastname, adress_id, telnumber, sex_id) VALUES(?,?,?,?,?,?,?,?,?)";
+    public static final String UPDATE_USERS_DELETE = "UPDATE users SET deleted = true WHERE id =?";
+    public static final String SELECT_EMAIL = "SELECT * FROM users WHERE email = ? AND deleted = false";
+    public static final String SELECT_FIRSTNAME = "SELECT * FROM users WHERE lastname = ? AND deleted = false";
+    public static final String SELECT_ROLE = "SELECT * FROM roles WHERE  role_id = ?";
+
     @Override
     public List<User> getAllUser() {
         List<User> users = new ArrayList<>();
-        int sexId = 0;
-        long adressId = 0;
+        int sexId,adressId,roleId;
         try{
             Statement statement = DbConfiguratorUsers.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_USERS);
@@ -47,16 +50,19 @@ public class UserDaoJdbcImpl implements UserDao{
                 user.setTelNum(resultSet.getString("telnumber"));
                 sexId = resultSet.getInt("sex_id");
                 user.setSex(getSexUser(sexId));
-                adressId = resultSet.getLong("adress_id");
+                adressId = resultSet.getInt("adress_id");
                 user.setAdress(getAdressUser(adressId));
+                roleId = resultSet.getInt("role_id");
+                user.setRole(getRoleUser(roleId));
                 users.add(user);
             }
         }catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("users not found");;
         }
         return users;
 
     }
+
     private Sex getSexUser(int sexId) throws SQLException {
         String sexName = "";
         Sex sex;
@@ -76,6 +82,31 @@ public class UserDaoJdbcImpl implements UserDao{
         }
         return sex;
     }
+
+    private Role getRoleUser(int roleId) throws SQLException {
+        String roleName = "";
+        Role role;
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_ROLE);
+        preparedStatement.setInt(1,roleId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            roleName = resultSet.getString("role_id");
+        }
+        switch (roleName.toUpperCase()) {
+            case ("ADMIN"):
+                role = Role.ADMIN;
+                break;
+            case ("MNGR"):
+                role = Role.MNGR;
+                break;
+            default:
+                role = Role.CUST;
+                break;
+        }
+        return role;
+
+    }
+
     private Adress getAdressUser(long adressId) throws SQLException {
         Adress adress = new Adress();
         PreparedStatement statement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_ADRESS_ID);
@@ -93,15 +124,13 @@ public class UserDaoJdbcImpl implements UserDao{
 
     @Override
     public User getUserById(Long id) throws SQLException {
-        int sexId = 0;
-        int adressId = 0;
+        int sexId,adressId,roleId;
         User user = new User();
         PreparedStatement statement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_ID);
         statement.setLong(1, id);
         ResultSet resultSet = statement.executeQuery();
         if(resultSet.next()){
             user.setId(resultSet.getLong("id"));
-            System.out.println(user.getId());
             user.setLogin(resultSet.getString("login"));
             user.setPassword(resultSet.getString("pass"));
             user.setEmail(resultSet.getString("email"));
@@ -112,6 +141,11 @@ public class UserDaoJdbcImpl implements UserDao{
             user.setSex(getSexUser(sexId));
             adressId = resultSet.getInt("adress_id");
             user.setAdress(getAdressUser(adressId));
+            roleId = resultSet.getInt("role_id");
+            user.setRole(getRoleUser(roleId));
+
+        } else{
+            System.out.println("users with ID not found");
         }
         return user;
     }
@@ -119,11 +153,9 @@ public class UserDaoJdbcImpl implements UserDao{
     @Override
     public User createUser(User user) throws SQLException {
         int adressId = 0;
-        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_EMAIL);
-        preparedStatement.setString(1, user.getEmail());
-        ResultSet resultSet = preparedStatement.executeQuery();
+        ResultSet resultSet = getResultSetUserLogin(user.getLogin());
         if (resultSet.next()) {
-            System.out.println("sorry, user with email in db or user deleted");
+            System.out.println("sorry, user with login in db or user deleted");
         } else {
             // Insert SQL adress
             extracted(user);
@@ -136,19 +168,27 @@ public class UserDaoJdbcImpl implements UserDao{
             }
             // insert new user
             PreparedStatement preparedStatement1 = DbConfiguratorUsers.getConnection().prepareStatement(CREATE_USER);
-            preparedStatement1.setString(1, user.getLogin());
-            preparedStatement1.setString(3, user.getPassword());
-            preparedStatement1.setString(2, user.getEmail());
-            preparedStatement1.setString(4, user.getFirstName());
-            preparedStatement1.setString(5, user.getLastName());
-            preparedStatement1.setInt(6, adressId);
-            preparedStatement1.setString(7, user.getTelNum());
-            preparedStatement1.setInt(8, sexId(user));
+            preparedStatement1.setInt(1,roleId(user));
+            preparedStatement1.setString(2, user.getLogin());
+            preparedStatement1.setString(3, user.getEmail());
+            preparedStatement1.setString(4, user.getPassword());
+            preparedStatement1.setString(5, user.getFirstName());
+            preparedStatement1.setString(6, user.getLastName());
+            preparedStatement1.setInt(7, adressId);
+            preparedStatement1.setString(8, user.getTelNum());
+            preparedStatement1.setInt(9, sexId(user));
             preparedStatement1.execute();
             System.out.println("congratulation, user is create");
         }
         return user;
     }
+
+    private ResultSet getResultSetUserLogin(String login) throws SQLException {
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_LOGIN);
+        preparedStatement.setString(1, login);
+        return preparedStatement.executeQuery();
+    }
+
     private void extracted(User user) throws SQLException {
         PreparedStatement preparedStatementAdress = DbConfiguratorUsers.getConnection().prepareStatement(INSERT_ADRESS);
         preparedStatementAdress.setString(1, user.getAdress().getCountry());
@@ -158,64 +198,179 @@ public class UserDaoJdbcImpl implements UserDao{
         preparedStatementAdress.setInt(5, user.getAdress().getApart());
         preparedStatementAdress.execute();
     }
+
     private int sexId(User user) {
         int sexId = user.getSex() == "MAN" ? 1 : 2;
         return sexId;
     }
 
+    private int roleId(User user) {
+        int roleId;
+        switch (user.getRole()) {
+            case ("ADMIN"):
+                roleId = 1;
+                break;
+            case ("MNGR"):
+                roleId = 2;
+                break;
+            default:
+                roleId = 3;
+                break;
+
+        }
+        return roleId;
+    }
+
     @Override
     public User updateUser(User user) throws SQLException {
         int adressId=0;
-        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_LOGIN);
-        preparedStatement.setString(1, user.getLogin());
-        ResultSet resultSet = preparedStatement.executeQuery();
+        //checking for the presence of a user's login
+        ResultSet resultSet = getResultSetUserLogin(user.getLogin());
         if(resultSet.next()) {
-            PreparedStatement preparedStatement2 = DbConfiguratorUsers.getConnection().prepareStatement(UPDATE_USER);
-            preparedStatement2.setString(1, user.getPassword());
-            preparedStatement2.setString(2, user.getFirstName());
-            preparedStatement2.setString(3, user.getLastName());
-            preparedStatement2.setString(4, user.getTelNum());
-            preparedStatement2.setInt(5, sexId(user));
-            preparedStatement2.setString(6, user.getLogin());
-            preparedStatement2.executeUpdate();
-
-            Statement statement = DbConfiguratorUsers.getConnection().createStatement();
-            ResultSet resultSet1 = statement.executeQuery(SELECT_ADRESS_ID_2);
+            PreparedStatement preparedStatementAdress = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_ADRESS_ID_2);
+            preparedStatementAdress.setString(1, user.getLogin());
+            ResultSet resultSet1 = preparedStatementAdress.executeQuery();
             if(resultSet1.next()) {
                 adressId = resultSet1.getInt("adress_id");
             }
-            PreparedStatement preparedStatementAdress = DbConfiguratorUsers.getConnection().prepareStatement(UPDATE_ADRESS);
-            preparedStatementAdress.setString(1, user.getAdress().getCountry());
-            preparedStatementAdress.setString(2, user.getAdress().getCity());
-            preparedStatementAdress.setString(3, user.getAdress().getStreet());
-            preparedStatementAdress.setInt(4, user.getAdress().getStrNum());
-            preparedStatementAdress.setInt(5, user.getAdress().getApart());
-            preparedStatementAdress.setInt(6, adressId);
-            preparedStatementAdress.execute();
+            PreparedStatement preparedStatementUpdateAdress = DbConfiguratorUsers.getConnection().prepareStatement(UPDATE_ADRESS);
+            preparedStatementUpdateAdress.setString(1, user.getAdress().getCountry());
+            preparedStatementUpdateAdress.setString(2, user.getAdress().getCity());
+            preparedStatementUpdateAdress.setString(3, user.getAdress().getStreet());
+            preparedStatementUpdateAdress.setInt(4, user.getAdress().getStrNum());
+            preparedStatementUpdateAdress.setInt(5, user.getAdress().getApart());
+            preparedStatementUpdateAdress.setInt(6, adressId);
+            preparedStatementUpdateAdress.execute();
+
+            PreparedStatement preparedStatement2 = DbConfiguratorUsers.getConnection().prepareStatement(UPDATE_USER);
+            preparedStatement2.setInt(1,roleId(user));
+            preparedStatement2.setString(2, user.getPassword());
+            preparedStatement2.setString(3, user.getFirstName());
+            preparedStatement2.setString(4, user.getLastName());
+            preparedStatement2.setString(5, user.getTelNum());
+            preparedStatement2.setInt(6, sexId(user));
+            preparedStatement2.setString(7, user.getLogin());
+            preparedStatement2.execute();
+            System.out.println("user update");
         } else {
             System.out.println("user is not found or deleted");
         }
-
         return user;
     }
 
     @Override
     public boolean deleteUser(Long id) throws SQLException {
-        return false;
+        boolean statusOperation = false;
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_ID);
+        preparedStatement.setLong(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()){
+            PreparedStatement preparedStatement1 = DbConfiguratorUsers.getConnection().prepareStatement(UPDATE_USERS_DELETE);
+            preparedStatement1.setLong(1,id);
+            preparedStatement1.executeUpdate();
+            System.out.println("congratulation, user is deleted");
+            statusOperation = true;
+        } else {
+            System.out.println("user with ID not found");
+        }
+
+        return statusOperation;
     }
 
     @Override
     public User getUserByEmail(String email) throws SQLException {
-        return null;
+        int sexId,adressId,roleId;
+        User user = new User();
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_EMAIL);
+        preparedStatement.setString(1, email.toLowerCase());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()){
+            user.setId(resultSet.getLong("id"));
+            user.setLogin(resultSet.getString("login"));
+            user.setPassword(resultSet.getString("pass"));
+            user.setEmail(resultSet.getString("email"));
+            user.setFirstName(resultSet.getString("firstname"));
+            user.setLastName(resultSet.getString("lastname"));
+            user.setTelNum(resultSet.getString("telnumber"));
+            sexId = resultSet.getInt("sex_id");
+            user.setSex(getSexUser(sexId));
+            adressId = resultSet.getInt("adress_id");
+            System.out.println(adressId);
+            user.setAdress(getAdressUser(adressId));
+            roleId = resultSet.getInt("role_id");
+            user.setRole(getRoleUser(roleId));
+        } else {
+            System.out.println("user with email not found");
+        }
+        return user;
     }
 
     @Override
-    public List<User> getUsersByLastName(String firstName) {
-        return null;
+    public List<User> getUsersByLastName(String lastName) throws SQLException {
+        List<User> users = new ArrayList<>();
+        int sexId,adressId,roleId;
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_FIRSTNAME);
+        preparedStatement.setString(1, lastName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            User user = new User();
+            user.setId(resultSet.getLong("id"));
+            user.setLogin(resultSet.getString("login"));
+            user.setPassword(resultSet.getString("pass"));
+            user.setEmail(resultSet.getString("email"));
+            user.setFirstName(resultSet.getString("firstname"));
+            user.setLastName(resultSet.getString("lastname"));
+            user.setTelNum(resultSet.getString("telnumber"));
+            sexId = resultSet.getInt("sex_id");
+            user.setSex(getSexUser(sexId));
+            adressId = resultSet.getInt("adress_id");
+            user.setAdress(getAdressUser(adressId));
+            roleId = resultSet.getInt("role_id");
+            user.setRole(getRoleUser(roleId));
+            users.add(user);
+        }
+        if(users.isEmpty()){
+            System.out.println("user(s) with lastname's is not found");
+        }
+
+        return users;
     }
 
     @Override
-    public int countAllUsers() throws SQLException {
-        return 0;
+    public int countAllUsers() {
+        int count = 0;
+        List<User> users = getAllUser();
+        if(!users.isEmpty()){
+            count = users.size();
+        }
+        return count;
+    }
+
+    @Override
+    public User getUserByLogin(String login) throws SQLException {
+        int sexId,adressId,roleId;
+        User user = new User();
+        PreparedStatement preparedStatement = DbConfiguratorUsers.getConnection().prepareStatement(SELECT_LOGIN);
+        preparedStatement.setString(1, login.toLowerCase());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()) {
+            user.setId(resultSet.getLong("id"));
+            user.setLogin(resultSet.getString("login"));
+            user.setPassword(resultSet.getString("pass"));
+            user.setEmail(resultSet.getString("email"));
+            user.setFirstName(resultSet.getString("firstname"));
+            user.setLastName(resultSet.getString("lastname"));
+            user.setTelNum(resultSet.getString("telnumber"));
+            sexId = resultSet.getInt("sex_id");
+            user.setSex(getSexUser(sexId));
+            adressId = resultSet.getInt("adress_id");
+            System.out.println(adressId);
+            user.setAdress(getAdressUser(adressId));
+            roleId = resultSet.getInt("role_id");
+            user.setRole(getRoleUser(roleId));
+        } else {
+            System.out.println("user with email not found");
+        }
+        return user;
     }
 }

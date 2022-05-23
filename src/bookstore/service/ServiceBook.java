@@ -16,7 +16,7 @@ public interface ServiceBook {
 
     BookDto updateBookDto(BookDto bookDto) throws SQLException;// замена инфы передаваемой книги и возврат измененных значений
 
-    void deleteBook(Long id) throws SQLException;// передача в бд книги ее поиск и дальнейшая пометка удалена
+    void deleteBookDto(Long id) throws SQLException;// передача в бд книги ее поиск и дальнейшая пометка удалена
 
     BookDto getBookDtoByIsbn(String isbn) throws SQLException;
 

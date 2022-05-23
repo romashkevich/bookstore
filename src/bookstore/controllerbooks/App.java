@@ -2,12 +2,17 @@ package bookstore.controllerbooks;
 import bookstore.dao.BookDaoJdbcImpl;
 import bookstore.dao.entity.Book;
 import bookstore.dao.BookDao;
+import bookstore.service.ServiceBook;
+import bookstore.service.ServiceBookImpl;
+import bookstore.service.dto.BookDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
 public class App {
     private static final BookDao BOOK_DAO = new BookDaoJdbcImpl();
+    private static final ServiceBook SERVICE_BOOK = new ServiceBookImpl();
+
 //    private static final Logger logger = LogManager.getLogger();
     private static final Logger logger = LogManager.getLogger("bookstore/controllerbooks/App");
 
@@ -21,51 +26,52 @@ public class App {
             switch (input) {
                 case "all":
                     System.out.println("list books: ");
-                    BOOK_DAO.getAllBooks().forEach(System.out::println);
+                    SERVICE_BOOK.getAllBooksDto().forEach(System.out::println);
+                    //BOOK_DAO.getAllBooks().forEach(System.out::println);
                     break;
 
                 case "id":
                     System.out.println("please input book id");
                     Scanner in1 = new Scanner(System.in);
-                    Long id = in.nextLong();
+                    Long id = in1.nextLong();
                     System.out.println("result");
-                    System.out.println(BOOK_DAO.getBookById(id));
+                    System.out.println(SERVICE_BOOK.getBookDtoById(id));
                     break;
 
                 case "create":
-                    Book book = getBook();
-                    BOOK_DAO.createBook(book);
+                    BookDto book = getBookDto();
+                    SERVICE_BOOK.createBookDto(book);
                     break;
 
                 case "update":
                     System.out.println("please input book isbn for update");
                     Scanner bookIsbn = new Scanner(System.in);
-                    Book book4Update = BOOK_DAO.getBookByIsbn(bookIsbn.nextLine());
-                    BOOK_DAO.updateBook(setBook(book4Update));
+                    BookDto bookDto4Update = SERVICE_BOOK.getBookDtoByIsbn(bookIsbn.nextLine());
+                    SERVICE_BOOK.updateBookDto(setBookDto(bookDto4Update));
                     break;
 
                 case "delete":
                     System.out.println("please input book id for delete");
                     Scanner in2 = new Scanner(System.in);
-                    BOOK_DAO.deleteBook(in.nextLong());
+                    SERVICE_BOOK.deleteBookDto(in2.nextLong());
                     break;
 
                 case "isbn":
                     System.out.println("please input isbn book(for example: 1234-1234)");
                     Scanner in3 = new Scanner(System.in);
-                    Book book1 = BOOK_DAO.getBookByIsbn(in3.nextLine());
+                    BookDto book1 = SERVICE_BOOK.getBookDtoByIsbn(in3.nextLine());
                     System.out.println(book1);
                     break;
 
                 case "author":
                     System.out.println("please input book author when you find");
                     Scanner in4 = new Scanner(System.in);
-                    BOOK_DAO.getBookByAuthor(in.next());
+                    SERVICE_BOOK.getBookDtoByAuthor(in4.next());
                     break;
 
                 case "count":
                     System.out.print("count books in db: ");
-                    System.out.println(BOOK_DAO.countAllBooks());
+                    System.out.println(SERVICE_BOOK.countAllBookDto());
                     break;
                 case "exit":
                     System.out.println("program is over");
@@ -107,8 +113,63 @@ public class App {
         book.setPrice(price.nextBigDecimal());
         return book;
     }
-    private static Book setBook(Book book){
+    private static Book setBookDto(Book book){
         Book book1 = book;
+        System.out.println("input book data");
+
+        System.out.println("title");
+        Scanner title= new Scanner(System.in);
+        book1.setTitle(title.nextLine());
+
+        System.out.println("author");
+        Scanner author = new Scanner(System.in);
+        book1.setAuthor(author.nextLine());
+
+        System.out.println("pages");
+        Scanner pages = new Scanner(System.in);
+        book1.setPages(pages.nextInt());
+
+        System.out.println("cover");
+        Scanner cover = new Scanner(System.in);
+        book1.setCover(cover.next());
+
+        System.out.println("price");
+        Scanner price = new Scanner(System.in);
+        book1.setPrice(price.nextBigDecimal());
+        return book1;
+    }
+
+    private static BookDto getBookDto() {
+        BookDto book = new BookDto();
+        System.out.println("input book data");
+
+        System.out.println("isbn(for example: 1234-1234 )");
+        Scanner isbn = new Scanner(System.in);
+        book.setIsbn(isbn.nextLine());
+
+        System.out.println("title");
+        Scanner title= new Scanner(System.in);
+        book.setTitle(title.nextLine());
+
+        System.out.println("author");
+        Scanner author = new Scanner(System.in);
+        book.setAuthor(author.nextLine());
+
+        System.out.println("pages");
+        Scanner pages = new Scanner(System.in);
+        book.setPages(pages.nextInt());
+
+        System.out.println("cover");
+        Scanner cover = new Scanner(System.in);
+        book.setCover(cover.next());
+
+        System.out.println("price");
+        Scanner price = new Scanner(System.in);
+        book.setPrice(price.nextBigDecimal());
+        return book;
+    }
+    private static BookDto setBookDto(BookDto book){
+        BookDto book1 = book;
         System.out.println("input book data");
 
         System.out.println("title");
