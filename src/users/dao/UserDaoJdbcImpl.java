@@ -44,7 +44,7 @@ public class UserDaoJdbcImpl implements UserDao{
         int sexId,adressId,roleId;
             Statement statement = DbConfiguratorUsers.getConnectionUsers().createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_USERS);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_USERS);
+            logger.debug("sql request on bd -->" + SELECT_USERS);
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -69,7 +69,7 @@ public class UserDaoJdbcImpl implements UserDao{
         String sexName = "";
         Sex sex = null;
             PreparedStatement statement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_SEX);
-            logger.log(Level.DEBUG,"sql request on bd -->" + SELECT_SEX);
+            logger.debug("sql request on bd -->" + SELECT_SEX);
 
             statement.setLong(1, sexId);
             ResultSet resultSet = statement.executeQuery();
@@ -92,7 +92,7 @@ public class UserDaoJdbcImpl implements UserDao{
         String roleName = "";
         Role role ;
             PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_ROLE);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_ROLE);
+            logger.debug( "sql request on bd -->" + SELECT_ROLE);
 
             preparedStatement.setInt(1, roleId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -119,7 +119,7 @@ public class UserDaoJdbcImpl implements UserDao{
         Adress adress = new Adress();
 
             PreparedStatement statement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_ADRESS_ID);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_ADRESS_ID);
+            logger.debug( "sql request on bd -->" + SELECT_ADRESS_ID);
             statement.setLong(1, adressId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -138,7 +138,7 @@ public class UserDaoJdbcImpl implements UserDao{
         int sexId,adressId,roleId;
         User user = new User();
             PreparedStatement statement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_ID);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_ID);
+            logger.debug( "sql request on bd -->" + SELECT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -174,14 +174,14 @@ public class UserDaoJdbcImpl implements UserDao{
                 // select SQL adress return max adress_id
                 Statement statement = DbConfiguratorUsers.getConnectionUsers().createStatement();
                 ResultSet resultSet1 = statement.executeQuery(SELECT_MAX_ADRESS_ID);
-                logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_MAX_ADRESS_ID);
+                logger.debug( "sql request on bd -->" + SELECT_MAX_ADRESS_ID);
                 if (resultSet1.next()) {
                     adressId = resultSet1.getInt("max");
                     System.out.println(adressId);
                 }
                 // insert new user
                 PreparedStatement preparedStatement1 = DbConfiguratorUsers.getConnectionUsers().prepareStatement(CREATE_USER);
-                logger.log(Level.DEBUG, "sql request on bd -->" + CREATE_USER);
+                logger.debug( "sql request on bd -->" + CREATE_USER);
                 preparedStatement1.setInt(1, roleId(user));
                 preparedStatement1.setString(2, user.getLogin());
                 preparedStatement1.setString(3, user.getEmail());
@@ -200,7 +200,7 @@ public class UserDaoJdbcImpl implements UserDao{
 
     private ResultSet getResultSetUserLogin(String login) throws SQLException {
         PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_LOGIN);
-        logger.log(Level.DEBUG,"sql request on bd -->" + SELECT_LOGIN);
+        logger.debug("sql request on bd -->" + SELECT_LOGIN);
         preparedStatement.setString(1, login);
         return preparedStatement.executeQuery();
     }
@@ -244,14 +244,14 @@ public class UserDaoJdbcImpl implements UserDao{
             ResultSet resultSet = getResultSetUserLogin(user.getLogin());
             if (resultSet.next()) {
                 PreparedStatement preparedStatementAdress = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_ADRESS_ID_2);
-                logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_ADRESS_ID_2);
+                logger.debug( "sql request on bd -->" + SELECT_ADRESS_ID_2);
                 preparedStatementAdress.setString(1, user.getLogin());
                 ResultSet resultSet1 = preparedStatementAdress.executeQuery();
                 if (resultSet1.next()) {
                     adressId = resultSet1.getInt("adress_id");
                 }
                 PreparedStatement preparedStatementUpdateAdress = DbConfiguratorUsers.getConnectionUsers().prepareStatement(UPDATE_ADRESS);
-                logger.log(Level.DEBUG, "sql request on bd -->" + UPDATE_ADRESS);
+                logger.debug( "sql request on bd -->" + UPDATE_ADRESS);
                 preparedStatementUpdateAdress.setString(1, user.getAdress().getCountry());
                 preparedStatementUpdateAdress.setString(2, user.getAdress().getCity());
                 preparedStatementUpdateAdress.setString(3, user.getAdress().getStreet());
@@ -261,7 +261,7 @@ public class UserDaoJdbcImpl implements UserDao{
                 preparedStatementUpdateAdress.execute();
 
                 PreparedStatement preparedStatement2 = DbConfiguratorUsers.getConnectionUsers().prepareStatement(UPDATE_USER);
-                logger.log(Level.DEBUG, "sql request on bd -->" + UPDATE_USER);
+                logger.debug( "sql request on bd -->" + UPDATE_USER);
                 preparedStatement2.setInt(1, roleId(user));
                 preparedStatement2.setString(2, user.getPassword());
                 preparedStatement2.setString(3, user.getFirstName());
@@ -282,12 +282,12 @@ public class UserDaoJdbcImpl implements UserDao{
         boolean statusOperation = false;
 
             PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_ID);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_ID);
+            logger.debug( "sql request on bd -->" + SELECT_ID);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 PreparedStatement preparedStatement1 = DbConfiguratorUsers.getConnectionUsers().prepareStatement(UPDATE_USERS_DELETE);
-                logger.log(Level.DEBUG, "sql request on bd -->" + UPDATE_USERS_DELETE);
+                logger.debug( "sql request on bd -->" + UPDATE_USERS_DELETE);
                 preparedStatement1.setLong(1, id);
                 preparedStatement1.executeUpdate();
                 System.out.println("congratulation, user is deleted");
@@ -304,7 +304,7 @@ public class UserDaoJdbcImpl implements UserDao{
         int sexId,adressId,roleId;
         User user = new User();
             PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_EMAIL);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_EMAIL);
+            logger.debug( "sql request on bd -->" + SELECT_EMAIL);
             preparedStatement.setString(1, email.toLowerCase());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -334,7 +334,7 @@ public class UserDaoJdbcImpl implements UserDao{
         List<User> users = new ArrayList<>();
         int sexId,adressId,roleId;
             PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_FIRSTNAME);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_FIRSTNAME);
+            logger.debug("sql request on bd -->" + SELECT_FIRSTNAME);
             preparedStatement.setString(1, lastName);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -375,7 +375,7 @@ public class UserDaoJdbcImpl implements UserDao{
         int sexId,adressId,roleId;
         User user = new User();
             PreparedStatement preparedStatement = DbConfiguratorUsers.getConnectionUsers().prepareStatement(SELECT_LOGIN);
-            logger.log(Level.DEBUG, "sql request on bd -->" + SELECT_LOGIN);
+            logger.debug( "sql request on bd -->" + SELECT_LOGIN);
             preparedStatement.setString(1, login.toLowerCase());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

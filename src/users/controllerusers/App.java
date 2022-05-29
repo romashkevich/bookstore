@@ -131,7 +131,7 @@ public class App {
                         System.out.println("invalid command, try again");
                 }
             } catch (Exception e) {
-                root.log(Level.ERROR,e);
+                root.error(e);
             }
         }
 
