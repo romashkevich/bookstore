@@ -25,7 +25,7 @@ public class ServiceUserImpl implements ServiceUser{
 
 
     public List<UserDto> getAllUserDto() throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         List<User> users = new ArrayList<>();
         List<UserDto> userDtoList = new ArrayList<>();
             users = userDao.getAllUser();
@@ -40,7 +40,7 @@ public class ServiceUserImpl implements ServiceUser{
     @Override
     public UserDto getUserDtoById(Long id) throws SQLException {
 
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         User user;
         UserDto userDto = new UserDto();
 
@@ -141,7 +141,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto createUserDto(UserDto uDto) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         UserDto userDto = new UserDto();
         User user1 = toUser(uDto);
         userDto = toUserDto(userDao.createUser(user1));
@@ -159,14 +159,14 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public void deleteUserDto(Long id) throws SQLException {
-        loger.log(Level.DEBUG,"");
-         userDao.deleteUser(id);
+        loger.debug("");
+        userDao.deleteUser(id);
 
     }
 
     @Override
     public UserDto getUserDtoByEmail(String email) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         UserDto userDto = new UserDto();
         User user = userDao.getUserByEmail(email);
         if (user != null) {
@@ -177,7 +177,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public List<UserDto> getUsersDtoByLastName(String lastName) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         List<UserDto> userDtoList = new ArrayList<>();
         List<User> users = userDao.getUsersByLastName(lastName);
         if (!users.isEmpty()) {
@@ -191,7 +191,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public int countAllUsersDto() throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         int count = 0;
         List<UserDto> usersDto = getAllUserDto();
         if (!usersDto.isEmpty()) {
@@ -202,7 +202,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto getUserDtoByLolin(String login) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         User user;
         UserDto userDto = new UserDto();
         user = userDao.getUserByLogin(login);

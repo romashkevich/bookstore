@@ -23,7 +23,7 @@ public class DbConfiguratorBooks {
         String pass = getUrl().get(2);
         String url = getUrl().get(3);
         String local = getUrl().get(4);
-        loger.log(Level.INFO,"data on connect db --> " + local);
+        loger.info("data on connect db --> " + local);
         connection = DriverManager.getConnection(local);
     }
 

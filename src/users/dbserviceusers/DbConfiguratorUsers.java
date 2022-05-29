@@ -24,7 +24,7 @@ public class DbConfiguratorUsers {
         String url = getUrl().get(3);
         String local = getUrl().get(4);
         connection = DriverManager.getConnection(local);
-        loger.log(Level.INFO,"data on connect db --> " + local);
+        loger.info("data on connect db --> " + local);
     }
 
     public static Connection getConnectionUsers() throws SQLException {

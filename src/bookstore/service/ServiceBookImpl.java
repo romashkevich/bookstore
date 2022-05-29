@@ -21,7 +21,7 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public List<BookDto> getAllBooksDto() throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         List<BookDto> bookDtos = bookDao.getAllBooks().stream()
                 .map(entity -> toBookDto(entity))
                 .collect(Collectors.toList());
@@ -30,7 +30,7 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public BookDto getBookDtoById(Long id) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         Book book = bookDao.getBookById(id);
         BookDto bookDto = toBookDto(book);
         return bookDto;
@@ -61,7 +61,7 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public BookDto createBookDto(BookDto bDto) throws Exception {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         BookDto bookDto;
         Book book = toBook(bDto);
         Book bookExist = bookDao.createBook(book);
@@ -71,7 +71,7 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public BookDto updateBookDto(BookDto bDto) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         BookDto bookDto;
         Book book = toBook(bDto);
         Book bookExist = bookDao.updateBook(book);
@@ -81,13 +81,13 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public void deleteBookDto(Long id) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         bookDao.deleteBook(id);
     }
 
     @Override
     public BookDto getBookDtoByIsbn(String isbn) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         Book book = bookDao.getBookByIsbn(isbn);
         BookDto bookDto = toBookDto(book);
         return bookDto ;
@@ -95,7 +95,7 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public List<BookDto> getBookDtoByAuthor(String author) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         List<BookDto> bookDtos;
         List<Book> books = bookDao.getBookByAuthor(author);
         bookDtos = books.stream().map(this::toBookDto).collect(Collectors.toList());
@@ -104,14 +104,14 @@ public class ServiceBookImpl implements ServiceBook {
 
     @Override
     public int countAllBookDto() throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         int count = bookDao.countAllBooks();
         return count;
     }
 
     @Override
     public BigDecimal priceBookDtoByAuthors(String author) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.debug("");
         BigDecimal sumAll;
         double sum = 0;
         List<BookDto> books = getBookDtoByAuthor(author);
