@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
-    List<User> getAllUser();
+    List<User> getAllUser() throws SQLException;
 
-    User getUserById(Long id) throws SQLException;
+    User getUserById(Long id) throws SQLException, Exception;
 
     User createUser(User user) throws Exception; // передаем книгу в базу данных и создаем строку с ее данными
 

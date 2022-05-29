@@ -1,5 +1,6 @@
 package bookstore.dbservicebooks;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,22 +15,22 @@ import java.util.Properties;
 
 public class DbConfiguratorBooks {
     private static Connection connection;
-    //private static String url = "jdbc:postgresql://127.0.0.1:5432/bh";
-    private static final Logger loger = LogManager.getLogger();
+    private static final Logger loger = LogManager.getLogger("connect db");
 
-    public static void initDbConnection() throws SQLException {  // метод подключения к базе данных
+    public static void initDbConnectionBooks() throws SQLException {  // метод подключения к базе данных
         String host = getUrl().get(0);
         String user = getUrl().get(1);
         String pass = getUrl().get(2);
         String url = getUrl().get(3);
         String local = getUrl().get(4);
+        loger.log(Level.INFO,"data on connect db --> " + local);
         connection = DriverManager.getConnection(local);
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnectionBooks() throws SQLException {
         if (connection == null) {
             try {
-            initDbConnection();
+            initDbConnectionBooks();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

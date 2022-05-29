@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ServiceBook {
 
-    List<BookDto> getAllBooksDto();
+    List<BookDto> getAllBooksDto() throws SQLException;
 
     BookDto getBookDtoById(Long id) throws SQLException;
 
@@ -20,9 +20,9 @@ public interface ServiceBook {
 
     BookDto getBookDtoByIsbn(String isbn) throws SQLException;
 
-    List<BookDto> getBookDtoByAuthor(String author);
+    List<BookDto> getBookDtoByAuthor(String author) throws SQLException;
 
     int countAllBookDto() throws SQLException;
 
-    BigDecimal priceBookDtoByAuthors(String author);
+    BigDecimal priceBookDtoByAuthors(String author) throws SQLException;
 }

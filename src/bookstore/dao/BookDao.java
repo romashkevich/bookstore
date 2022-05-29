@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookDao {// CRUD репозиторий
 
-    List<Book> getAllBooks();
+    List<Book> getAllBooks() throws SQLException;
     Book getBookById(Long id) throws SQLException;
 
     Book createBook(Book book) throws Exception; // передаем книгу в базу данных и создаем строку с ее данными
@@ -18,7 +18,7 @@ public interface BookDao {// CRUD репозиторий
 
     Book getBookByIsbn(String isbn) throws SQLException;
 
-    List<Book> getBookByAuthor(String author);
+    List<Book> getBookByAuthor(String author) throws SQLException;
 
     int countAllBooks() throws SQLException;
 }

@@ -1,5 +1,8 @@
 package users.service;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import users.dao.UserDaoJdbcImpl;
 import users.dao.entity.Adress;
 import users.dao.entity.Role;
@@ -11,31 +14,41 @@ import users.service.dto.SexDto;
 import users.service.dto.UserDto;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ServiceUserImpl implements ServiceUser{
 
     UserDaoJdbcImpl userDao = new UserDaoJdbcImpl();
+    private static final Logger loger = LogManager.getLogger("run service method");
 
-    public List<UserDto> getAllUserDto() {
-        List<User> users = userDao.getAllUser();
-        List<UserDto> userDtoList = null;
-        if(users != null){
-            userDtoList = users.stream()
-                    .map(user -> toUserDto(user))
-                    .collect(Collectors.toList());
-        }
+
+    public List<UserDto> getAllUserDto() throws SQLException {
+        loger.log(Level.DEBUG,"");
+        List<User> users = new ArrayList<>();
+        List<UserDto> userDtoList = new ArrayList<>();
+            users = userDao.getAllUser();
+            if(users != null){
+                userDtoList = users.stream()
+                        .map(user -> toUserDto(user))
+                        .collect(Collectors.toList());
+            }
         return userDtoList;
     }
 
     @Override
     public UserDto getUserDtoById(Long id) throws SQLException {
-        User user = userDao.getUserById(id);
-        UserDto userDto = null;
-        if (user!=null) {
-            userDto = toUserDto(user);
-        }
+
+        loger.log(Level.DEBUG,"");
+        User user;
+        UserDto userDto = new UserDto();
+
+            user = userDao.getUserById(id);
+            if (user!=null) {
+                userDto = toUserDto(user);
+            }
+
         return userDto;
     }
 
@@ -128,7 +141,8 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto createUserDto(UserDto uDto) throws SQLException {
-        UserDto userDto;
+        loger.log(Level.DEBUG,"");
+        UserDto userDto = new UserDto();
         User user1 = toUser(uDto);
         userDto = toUserDto(userDao.createUser(user1));
         return userDto;
@@ -136,7 +150,8 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto updateUserDto(UserDto user) throws SQLException {
-        UserDto userDto;
+        loger.log(Level.DEBUG,"");
+        UserDto userDto = new UserDto();
         User user1 = toUser(user);
         userDto = toUserDto(userDao.updateUser(user1));
         return userDto;
@@ -144,14 +159,17 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public void deleteUserDto(Long id) throws SQLException {
-        userDao.deleteUser(id);
+        loger.log(Level.DEBUG,"");
+         userDao.deleteUser(id);
+
     }
 
     @Override
     public UserDto getUserDtoByEmail(String email) throws SQLException {
+        loger.log(Level.DEBUG,"");
+        UserDto userDto = new UserDto();
         User user = userDao.getUserByEmail(email);
-        UserDto userDto = null;
-        if(user!=null) {
+        if (user != null) {
             userDto = toUserDto(user);
         }
         return userDto;
@@ -159,21 +177,24 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public List<UserDto> getUsersDtoByLastName(String lastName) throws SQLException {
+        loger.log(Level.DEBUG,"");
+        List<UserDto> userDtoList = new ArrayList<>();
         List<User> users = userDao.getUsersByLastName(lastName);
-        List<UserDto> userDtoList = null;
-        if(users!=null){
+        if (!users.isEmpty()) {
             userDtoList = users.stream()
                     .map(this::toUserDto)
                     .collect(Collectors.toList());
         }
+
         return userDtoList;
     }
 
     @Override
-    public int countAllUsersDto() {
+    public int countAllUsersDto() throws SQLException {
+        loger.log(Level.DEBUG,"");
         int count = 0;
         List<UserDto> usersDto = getAllUserDto();
-        if(!usersDto.isEmpty()){
+        if (!usersDto.isEmpty()) {
             count = usersDto.size();
         }
         return count;
@@ -181,12 +202,11 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto getUserDtoByLolin(String login) throws SQLException {
-        User user ;
+        loger.log(Level.DEBUG,"");
+        User user;
+        UserDto userDto = new UserDto();
         user = userDao.getUserByLogin(login);
-        System.out.println(user);
-        UserDto userDto;
         userDto = toUserDto(user);
-        System.out.println(userDto);
         return userDto;
     }
 }

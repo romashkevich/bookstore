@@ -1,6 +1,9 @@
 package users.controllerusers;
 import bookstore.dao.entity.Book;
 import bookstore.service.dto.BookDto;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import users.dao.UserDao;
 import users.dao.UserDaoJdbcImpl;
 import users.dao.entity.Adress;
@@ -13,6 +16,7 @@ import users.service.dto.RoleDto;
 import users.service.dto.SexDto;
 import users.service.dto.UserDto;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,9 +24,9 @@ import java.util.Scanner;
 public class App {
 
     private static final ServiceUser SERVICE_USER = new ServiceUserImpl();
-    private static final UserDaoJdbcImpl USER_DAO = new UserDaoJdbcImpl();
+    private static final Logger root = LogManager.getRootLogger();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws SQLException {
 
 //        User user = new User();
 //        user = USER_DAO.getUserByLogin("nik1");
@@ -53,77 +57,81 @@ public class App {
             System.out.println("conditon : all, id, create, update, delete, email, lastname, count, login or exit (for exit program)");
             Scanner in = new Scanner(System.in);
             String input = in.next().toLowerCase().trim();
-            switch (input) {
-                case "all":
-                    System.out.println("list users: ");
-                    List<UserDto> userDtoList = SERVICE_USER.getAllUserDto();
-                    if(!userDtoList.isEmpty()) {
-                        userDtoList.forEach(System.out::println);
-                    }
-                    break;
+            try {
+                switch (input) {
+                    case "all":
+                        System.out.println("list users: ");
+                        List<UserDto> userDtoList = SERVICE_USER.getAllUserDto();
+                        if (!userDtoList.isEmpty()) {
+                            userDtoList.forEach(System.out::println);
+                        }
+                        break;
 
-                case "id":
-                    System.out.println("please input user id");
-                    Scanner in1 = new Scanner(System.in);
-                    Long id = in1.nextLong();
-                    System.out.println(SERVICE_USER.getUserDtoById(id));
-                    break;
+                    case "id":
+                        System.out.println("please input user id");
+                        Scanner in1 = new Scanner(System.in);
+                        Long id = in1.nextLong();
+                        System.out.println(SERVICE_USER.getUserDtoById(id));
+                        break;
 
-                case "create":
-                    UserDto userDto4 = getUserDto();
-                    SERVICE_USER.createUserDto(userDto4);
-                    break;
+                    case "create":
+                        UserDto userDto4 = getUserDto();
+                        SERVICE_USER.createUserDto(userDto4);
+                        break;
 
-                case "update":
-                    System.out.println("please input user's login");
-                    Scanner login = new Scanner(System.in);//login
-                    UserDto userDto4Update = SERVICE_USER.getUserDtoByLolin(login.nextLine());//
-                    SERVICE_USER.updateUserDto(setUserDto(userDto4Update));
-                    break;
+                    case "update":
+                        System.out.println("please input user's login");
+                        Scanner login = new Scanner(System.in);//login
+                        UserDto userDto4Update = SERVICE_USER.getUserDtoByLolin(login.nextLine());//
+                        SERVICE_USER.updateUserDto(setUserDto(userDto4Update));
+                        break;
 
-                case "delete":
-                    System.out.println("please input user id for delete");
-                    Scanner in2 = new Scanner(System.in);
-                    SERVICE_USER.deleteUserDto(in2.nextLong());
-                    break;
+                    case "delete":
+                        System.out.println("please input user id for delete");
+                        Scanner in2 = new Scanner(System.in);
+                        SERVICE_USER.deleteUserDto(in2.nextLong());
+                        break;
 
-                case "email":
-                    System.out.println("please input user's email(for example: xxxx@yy.com)");
-                    Scanner in3 = new Scanner(System.in);
-                    UserDto userDto1 = SERVICE_USER.getUserDtoByEmail(in3.nextLine());
-                    System.out.println(userDto1);
+                    case "email":
+                        System.out.println("please input user's email(for example: xxxx@yy.com)");
+                        Scanner in3 = new Scanner(System.in);
+                        UserDto userDto1 = SERVICE_USER.getUserDtoByEmail(in3.nextLine());
+                        System.out.println(userDto1);
 
-                    break;
+                        break;
 
-                case "lastname":
-                    System.out.println("please input user's lastname");
-                    Scanner in4 = new Scanner(System.in);
-                    List<UserDto> userDtoList1 = SERVICE_USER.getUsersDtoByLastName(in4.next());
-                    if(!userDtoList1.isEmpty()) {
-                        userDtoList1.forEach(System.out::println);
-                    }
-                    break;
+                    case "lastname":
+                        System.out.println("please input user's lastname");
+                        Scanner in4 = new Scanner(System.in);
+                        List<UserDto> userDtoList1 = SERVICE_USER.getUsersDtoByLastName(in4.next());
+                        if (!userDtoList1.isEmpty()) {
+                            userDtoList1.forEach(System.out::println);
+                        }
+                        break;
 
-                case "count":
-                    System.out.print("count users in db: ");
-                    System.out.println(SERVICE_USER.countAllUsersDto());
-                    break;
+                    case "count":
+                        System.out.print("count users in db: ");
+                        System.out.println(SERVICE_USER.countAllUsersDto());
+                        break;
 
-                case "login":
-                    System.out.println("please input user's login");
-                    Scanner login1 = new Scanner(System.in);
-                    UserDto userDto2 = SERVICE_USER.getUserDtoByLolin(login1.nextLine());
-                    System.out.println(userDto2);
-                    break;
+                    case "login":
+                        System.out.println("please input user's login");
+                        Scanner login1 = new Scanner(System.in);
+                        UserDto userDto2 = SERVICE_USER.getUserDtoByLolin(login1.nextLine());
+                        System.out.println(userDto2);
+                        break;
 
 
-                case "exit":
-                    System.out.println("program is over");
-                    process = false;
-                    break;
+                    case "exit":
+                        System.out.println("program is over");
+                        process = false;
+                        break;
 
-                default:
-                    System.out.println("invalid command, try again");
+                    default:
+                        System.out.println("invalid command, try again");
+                }
+            } catch (Exception e) {
+                root.log(Level.ERROR,e);
             }
         }
 
@@ -256,6 +264,7 @@ public class App {
 
         return adressDto;
     }
+
 
 
 }

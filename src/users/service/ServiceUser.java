@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ServiceUser {
-    public List<UserDto> getAllUserDto();
+    public List<UserDto> getAllUserDto() throws SQLException;
 
     public UserDto getUserDtoById(Long id) throws SQLException;
 
