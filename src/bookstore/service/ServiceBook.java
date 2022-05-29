@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ServiceBook {
 
-    List<BookDto> getAllBooksDto();
+    List<BookDto> getAllBooksDto() throws SQLException;
 
     BookDto getBookDtoById(Long id) throws SQLException;
 
@@ -16,13 +16,13 @@ public interface ServiceBook {
 
     BookDto updateBookDto(BookDto bookDto) throws SQLException;// замена инфы передаваемой книги и возврат измененных значений
 
-    void deleteBook(Long id) throws SQLException;// передача в бд книги ее поиск и дальнейшая пометка удалена
+    void deleteBookDto(Long id) throws SQLException;// передача в бд книги ее поиск и дальнейшая пометка удалена
 
     BookDto getBookDtoByIsbn(String isbn) throws SQLException;
 
-    List<BookDto> getBookDtoByAuthor(String author);
+    List<BookDto> getBookDtoByAuthor(String author) throws SQLException;
 
     int countAllBookDto() throws SQLException;
 
-    BigDecimal priceBookDtoByAuthors(String author);
+    BigDecimal priceBookDtoByAuthors(String author) throws SQLException;
 }
