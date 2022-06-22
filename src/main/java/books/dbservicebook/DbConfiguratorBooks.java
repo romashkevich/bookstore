@@ -3,8 +3,10 @@ package books.dbservicebook;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,13 +18,14 @@ public class DbConfiguratorBooks {
     private static Connection connection;
     private static final Logger loger = LogManager.getLogger("connect db");
 
-    public static void initDbConnectionBooks() throws SQLException {  // метод подключения к базе данных
+    public static void initDbConnectionBooks() throws SQLException, ClassNotFoundException {  // метод подключения к базе данных
         String host = getUrl().get(0);
         String user = getUrl().get(1);
         String pass = getUrl().get(2);
         String url = getUrl().get(3);
         String local = getUrl().get(4);
         loger.info("data on connect db --> " + local);
+        Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(local);
     }
 
@@ -30,7 +33,7 @@ public class DbConfiguratorBooks {
         if (connection == null) {
             try {
             initDbConnectionBooks();
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -46,7 +49,14 @@ public class DbConfiguratorBooks {
         String pass = "";
         String url = "";
         try {
-            FileInputStream fis = new FileInputStream("src/main/resources/config.properties");
+            File configFile = new File("bookstore.env");
+            FileInputStream fis;
+            if (configFile.exists()) {
+                fis = new FileInputStream("bookstore.env");
+            } else {
+                fis = new FileInputStream("src/main/resources/config.properties");
+            }
+
             properties.load(fis);
             host = properties.getProperty("db.host.remove.books.url");
             inter.add(host);
