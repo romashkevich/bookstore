@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class ServiceBookImpl implements ServiceBook{
     private static final Logger loger = LogManager.getLogger("run main.books.service method");
 
     @Override
-    public List<BookDto> getAllBooksDto() throws SQLException {
+    public Collection<? extends BookDto> getAllBooksDto() throws SQLException {
         loger.debug("");
         List<BookDto> bookDtos = bookDao.getAllBooks().stream()
                 .map(entity -> toBookDto(entity))

@@ -3,11 +3,12 @@ package books.service;
 import books.service.dto.BookDto;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 public interface ServiceBook {
 
-    List<BookDto> getAllBooksDto() throws SQLException;
+    Collection<? extends BookDto> getAllBooksDto() throws SQLException;
 
     BookDto getBookDtoById(Long id) throws SQLException;
 

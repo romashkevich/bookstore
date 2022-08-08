@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 @WebServlet("/book")
-public class App  extends HttpServlet{
+public class AppId extends HttpServlet{
 
     private static final ServiceBook SERVICE_BOOK = new ServiceBookImpl();
     private static final Logger logger = LogManager.getRootLogger();
@@ -201,22 +201,16 @@ public class App  extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Long id = Long.valueOf(req.getParameter("id"));
         resp.setStatus(200);
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        BookDto bookDto = new BookDto();
-        bookDto.setAuthor("kon");
-        bookDto.setTitle("kon");
-        out.write("<div>"+bookDto+"</div>");
         try {
+            BookDto bookDto = new BookDto();
+            bookDto = SERVICE_BOOK.getBookDtoById(id);
             out.write("<h1>Book</h1>");
-            List<BookDto> bookDtos = new ArrayList<>();
-            bookDtos.addAll(SERVICE_BOOK.getAllBooksDto());
-            if (!bookDtos.isEmpty()) {
-                for (BookDto bDto : bookDtos) {
-                    out.write("<div>"+bDto+"</div>");
-                }
-            }
+            out.write("<div>"+bookDto+"</div>");
+
         } catch (Exception e) {
             out.write("<div>"+e+"</div>");
         }

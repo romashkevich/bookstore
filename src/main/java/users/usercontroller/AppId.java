@@ -1,4 +1,9 @@
 package users.usercontroller;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import users.service.ServiceUser;
@@ -8,13 +13,15 @@ import users.service.dto.RoleDto;
 import users.service.dto.SexDto;
 import users.service.dto.UserDto;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
+@WebServlet("/userId")
+public class AppId extends HttpServlet{
 
-public class App {
-
-    private static final ServiceUser SERVICE_USER = new ServiceUserImpl();
+    private static final ServiceUser SERVICE_USER_ID = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();
 
     public static void main(String[] args){
@@ -29,7 +36,7 @@ public class App {
                 switch (input) {
                     case "all":
                         System.out.println("list users: ");
-                        List<UserDto> userDtoList = SERVICE_USER.getAllUserDto();
+                        List<UserDto> userDtoList = SERVICE_USER_ID.getAllUserDto();
                         if (!userDtoList.isEmpty()) {
                             userDtoList.forEach(System.out::println);
                         }
@@ -39,31 +46,31 @@ public class App {
                         System.out.println("please input user id");
                         Scanner in1 = new Scanner(System.in);
                         Long id = in1.nextLong();
-                        System.out.println(SERVICE_USER.getUserDtoById(id));
+                        System.out.println(SERVICE_USER_ID.getUserDtoById(id));
                         break;
 
                     case "create":
                         UserDto userDto4 = getUserDto();
-                        SERVICE_USER.createUserDto(userDto4);
+                        SERVICE_USER_ID.createUserDto(userDto4);
                         break;
 
                     case "update":
                         System.out.println("please input user's login");
                         Scanner login = new Scanner(System.in);//login
-                        UserDto userDto4Update = SERVICE_USER.getUserDtoByLolin(login.nextLine());//
-                        SERVICE_USER.updateUserDto(setUserDto(userDto4Update));
+                        UserDto userDto4Update = SERVICE_USER_ID.getUserDtoByLolin(login.nextLine());//
+                        SERVICE_USER_ID.updateUserDto(setUserDto(userDto4Update));
                         break;
 
                     case "delete":
                         System.out.println("please input user id for delete");
                         Scanner in2 = new Scanner(System.in);
-                        SERVICE_USER.deleteUserDto(in2.nextLong());
+                        SERVICE_USER_ID.deleteUserDto(in2.nextLong());
                         break;
 
                     case "email":
                         System.out.println("please input user's email(for example: xxxx@yy.com)");
                         Scanner in3 = new Scanner(System.in);
-                        UserDto userDto1 = SERVICE_USER.getUserDtoByEmail(in3.nextLine());
+                        UserDto userDto1 = SERVICE_USER_ID.getUserDtoByEmail(in3.nextLine());
                         System.out.println(userDto1);
 
                         break;
@@ -71,7 +78,7 @@ public class App {
                     case "lastname":
                         System.out.println("please input user's lastname");
                         Scanner in4 = new Scanner(System.in);
-                        List<UserDto> userDtoList1 = SERVICE_USER.getUsersDtoByLastName(in4.next());
+                        List<UserDto> userDtoList1 = SERVICE_USER_ID.getUsersDtoByLastName(in4.next());
                         if (!userDtoList1.isEmpty()) {
                             userDtoList1.forEach(System.out::println);
                         }
@@ -79,13 +86,13 @@ public class App {
 
                     case "count":
                         System.out.print("count users in db: ");
-                        System.out.println(SERVICE_USER.countAllUsersDto());
+                        System.out.println(SERVICE_USER_ID.countAllUsersDto());
                         break;
 
                     case "login":
                         System.out.println("please input user's login");
                         Scanner login1 = new Scanner(System.in);
-                        UserDto userDto2 = SERVICE_USER.getUserDtoByLolin(login1.nextLine());
+                        UserDto userDto2 = SERVICE_USER_ID.getUserDtoByLolin(login1.nextLine());
                         System.out.println(userDto2);
                         break;
 
@@ -233,8 +240,20 @@ public class App {
         return adressDto;
     }
 
-
-
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setStatus(200);
+        Long id = Long.valueOf(req.getParameter("id"));
+        resp.setContentType("text/html");
+        PrintWriter out = resp.getWriter();
+        try {
+            UserDto userDto;
+            userDto = SERVICE_USER_ID.getUserDtoById(id);
+            out.write("<div>"+userDto+"</div>");
+        } catch (Exception e){
+            out.write("<div>"+e+"</div>");
+        }
+    }
 }
 
 

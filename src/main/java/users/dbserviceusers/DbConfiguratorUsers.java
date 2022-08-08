@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,21 +17,23 @@ public class DbConfiguratorUsers {
     private static Connection connection;
     private static final Logger loger = LogManager.getLogger("connect db");
 
-    public static void initDbConnectionUsers() throws SQLException {  // метод подключения к базе данных
+    public static void initDbConnectionUsers() throws SQLException, ClassNotFoundException {  // метод подключения к базе данных
         String host = getUrl().get(0);
         String user = getUrl().get(1);
         String pass = getUrl().get(2);
         String url = getUrl().get(3);
         String local = getUrl().get(4);
-        connection = DriverManager.getConnection(local);
         loger.info("data on connect db --> " + local);
+        Class.forName("org.postgresql.Driver");
+        connection = DriverManager.getConnection(local);
+
     }
 
     public static Connection getConnectionUsers() throws SQLException {
         if (connection == null) {
             try {
             initDbConnectionUsers();
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -46,8 +49,9 @@ public class DbConfiguratorUsers {
         String pass = "";
         String url = "";
         try {
-            FileInputStream fis = new FileInputStream("src/main/resources/config.properties");
-            properties.load(fis);
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream foo = loader.getResourceAsStream("config.properties");
+            properties.load(foo);
             host = properties.getProperty("db.host.remove.user.url");
             inter.add(host);
             user = properties.getProperty("db.host.remove.user.user");

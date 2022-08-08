@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,7 +29,6 @@ public class DbConfiguratorBooks {
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(local);
     }
-
     public static Connection getConnectionBooks() throws SQLException {
         if (connection == null) {
             try {
@@ -39,7 +39,6 @@ public class DbConfiguratorBooks {
         }
         return connection;
     }
-
     public static List<String> getUrl() {
         Properties properties = new Properties();
         List<String> inter = new ArrayList<String>();
@@ -49,15 +48,9 @@ public class DbConfiguratorBooks {
         String pass = "";
         String url = "";
         try {
-            File configFile = new File("bookstore.env");
-            FileInputStream fis;
-            if (configFile.exists()) {
-                fis = new FileInputStream("bookstore.env");
-            } else {
-                fis = new FileInputStream("src/main/resources/config.properties");
-            }
-
-            properties.load(fis);
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream foo = loader.getResourceAsStream("config.properties");
+            properties.load(foo);
             host = properties.getProperty("db.host.remove.books.url");
             inter.add(host);
             user = properties.getProperty("db.host.remove.books.user");
