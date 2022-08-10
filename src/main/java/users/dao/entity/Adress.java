@@ -9,7 +9,10 @@ public class Adress {
     private String street;
     private int strNum;
     private int apart;
-    public Adress(){}
+
+    public Adress() {
+    }
+
     public Adress(String country, String city, String street, int strNum, int apart) {
         this.country = country;
         this.city = city;
@@ -30,7 +33,6 @@ public class Adress {
     public int hashCode() {
         return Objects.hash(country, city, street, strNum, apart);
     }
-
 
 
     @Override

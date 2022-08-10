@@ -41,7 +41,7 @@ public class BookDaoJdbcImpl implements Bookdao {
         Statement statement = DbConfiguratorBooks.getConnectionBooks().createStatement();
         ResultSet resultSet = statement.executeQuery(GET_ALL);
         logger.debug("sql request on bd -->" + GET_ALL);
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             Book book = new Book();
             book.setId(resultSet.getLong("id"));
             book.setIsbn(resultSet.getString("isbn"));
@@ -74,7 +74,7 @@ public class BookDaoJdbcImpl implements Bookdao {
             return book;
         }
 
-        return  book;
+        return book;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class BookDaoJdbcImpl implements Bookdao {
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             PreparedStatement preparedStatement = DbConfiguratorBooks.getConnectionBooks().prepareStatement(UPDATE_BOOK);
-            logger.debug("sql request on bd -->"+ UPDATE_BOOK);
+            logger.debug("sql request on bd -->" + UPDATE_BOOK);
 
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getAuthor());
@@ -181,9 +181,9 @@ public class BookDaoJdbcImpl implements Bookdao {
         List<Book> booksByAuthor = new ArrayList<>();
         for (Book book : books) {
             String input = book.getAuthor().toLowerCase();// строка в которой ищут
-            Pattern pattern = Pattern.compile(author.toLowerCase()+"\\s*\\w*"); // поиск совпадений
+            Pattern pattern = Pattern.compile(author.toLowerCase() + "\\s*\\w*"); // поиск совпадений
             Matcher matcher = pattern.matcher(input);
-            while(matcher.find()){
+            while (matcher.find()) {
                 booksByAuthor.add(book);
                 System.out.println(book);
             }
@@ -193,10 +193,10 @@ public class BookDaoJdbcImpl implements Bookdao {
 
     @Override
     public int countAllBooks() throws SQLException {
-        int count=0;
+        int count = 0;
         Statement statement = DbConfiguratorBooks.getConnectionBooks().createStatement();
         ResultSet resultSet = statement.executeQuery(SELECT_COUNT);
-        logger.debug("sql request on bd -->" + SELECT_COUNT );
+        logger.debug("sql request on bd -->" + SELECT_COUNT);
         if (resultSet.next()) {
             count = resultSet.getInt("count");
         }

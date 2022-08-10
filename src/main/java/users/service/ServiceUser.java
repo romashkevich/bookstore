@@ -21,6 +21,7 @@ public interface ServiceUser {
     public List<UserDto> getUsersDtoByLastName(String lastName) throws SQLException;
 
     public int countAllUsersDto() throws SQLException;
+
     UserDto getUserDtoByLolin(String login) throws SQLException;
 
 }

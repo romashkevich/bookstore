@@ -17,25 +17,47 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/userAll")
+@WebServlet("/user")
 public class AppAll extends HttpServlet {
     private static final ServiceUser SERVICE_USER_ALL = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(200);
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        try {
-            List<UserDto> userDtos = new ArrayList<>(SERVICE_USER_ALL.getAllUserDto());
-            if(!userDtos.isEmpty()) {
-                for(UserDto uDto : userDtos) {
-                    out.write("<div>"+uDto+"</div>");
+        if (req.getParameter("id") == null) {
+            try {
+                List<UserDto> userDtos = new ArrayList<>(SERVICE_USER_ALL.getAllUserDto());
+                if (!userDtos.isEmpty()) {
+                    out.write("<img src=" + "images/emblema_13.jpg" + ">");
+                    out.write("<h1>Users</h1>");
+                    for (UserDto uDto : userDtos) {
+                        out.write("<a href=" + "http://localhost:8010/bookstore/user?id=" + uDto.getId() + ">" + uDto.getLogin() + "<br></a>");
+                    }
                 }
+            } catch (Exception e) {
+                resp.sendError(404, "not connect with db");
             }
-        } catch (Exception e) {
-            out.write("<div>"+e+"</div>");
         }
+        if (!(req.getParameter("id") == null)) {
+            try {
+                Long idValue = Long.parseLong(req.getParameter("id"));
+                long count = (long) SERVICE_USER_ALL.countAllUsersDto();
+                if (idValue >= 0 && idValue <= count) {
+                    UserDto userDto = SERVICE_USER_ALL.getUserDtoById(idValue);
+                    out.write("<h1>User<br></h1>");
+                    out.write("<div>" + userDto + "</div>");
+                } else {
+                    throw new SQLException();
+                }
+            } catch (NumberFormatException | SQLException e) {
+                resp.sendError(404, "this id is not correct or not connect with DB");
+
+            }
+        }
+
     }
 }
 

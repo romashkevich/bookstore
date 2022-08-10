@@ -22,5 +22,5 @@ public interface UserDao {
 
     int countAllUsers() throws SQLException;
 
-    User getUserByLogin (String login) throws SQLException;
+    User getUserByLogin(String login) throws SQLException;
 }

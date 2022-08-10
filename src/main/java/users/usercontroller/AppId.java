@@ -1,4 +1,5 @@
 package users.usercontroller;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,12 +20,12 @@ import java.util.List;
 import java.util.Scanner;
 
 @WebServlet("/userId")
-public class AppId extends HttpServlet{
+public class AppId extends HttpServlet {
 
     private static final ServiceUser SERVICE_USER_ID = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
 
         boolean process = true;
@@ -155,6 +156,7 @@ public class AppId extends HttpServlet{
 
         return userDto;
     }
+
     private static UserDto setUserDto(UserDto userDto1) {
 
         UserDto userDto = new UserDto();
@@ -194,14 +196,16 @@ public class AppId extends HttpServlet{
 
         return userDto;
     }
+
     private static SexDto setSexDtoApp(String sexDto) {
         SexDto sexDto1 = sexDto.toUpperCase() == "MAN" ? SexDto.MAN : SexDto.WOMAN;
         return sexDto1;
     }
+
     private static RoleDto setRoleDtoApp(String roleDto) {
         RoleDto roleDto1;
         switch (roleDto.toUpperCase()) {
-            case("ADMIN"):
+            case ("ADMIN"):
                 roleDto1 = RoleDto.ADMIN;
                 break;
             case ("MANAGER"):
@@ -213,6 +217,7 @@ public class AppId extends HttpServlet{
         }
         return roleDto1;
     }
+
     private static AdressDto setAdressDtoApp() {
 
         AdressDto adressDto = new AdressDto();
@@ -249,9 +254,9 @@ public class AppId extends HttpServlet{
         try {
             UserDto userDto;
             userDto = SERVICE_USER_ID.getUserDtoById(id);
-            out.write("<div>"+userDto+"</div>");
-        } catch (Exception e){
-            out.write("<div>"+e+"</div>");
+            out.write("<div>" + userDto + "</div>");
+        } catch (Exception e) {
+            out.write("<div>" + e + "</div>");
         }
     }
 }

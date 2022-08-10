@@ -32,7 +32,7 @@ public class DbConfiguratorUsers {
     public static Connection getConnectionUsers() throws SQLException {
         if (connection == null) {
             try {
-            initDbConnectionUsers();
+                initDbConnectionUsers();
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

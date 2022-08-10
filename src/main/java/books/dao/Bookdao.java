@@ -8,6 +8,7 @@ import java.util.List;
 public interface Bookdao {
 
     List<Book> getAllBooks() throws SQLException;
+
     Book getBookById(Long id) throws SQLException;
 
     Book createBook(Book book) throws Exception; // передаем книгу в базу данных и создаем строку с ее данными

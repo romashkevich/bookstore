@@ -29,16 +29,18 @@ public class DbConfiguratorBooks {
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(local);
     }
+
     public static Connection getConnectionBooks() throws SQLException {
         if (connection == null) {
             try {
-            initDbConnectionBooks();
+                initDbConnectionBooks();
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
         return connection;
     }
+
     public static List<String> getUrl() {
         Properties properties = new Properties();
         List<String> inter = new ArrayList<String>();

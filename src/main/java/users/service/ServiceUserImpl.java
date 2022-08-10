@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ServiceUserImpl implements ServiceUser{
+public class ServiceUserImpl implements ServiceUser {
 
     UserDaoJdbcImpl userDao = new UserDaoJdbcImpl();
     private static final Logger loger = LogManager.getLogger("run main.books.service method");
@@ -28,12 +28,12 @@ public class ServiceUserImpl implements ServiceUser{
         loger.debug("");
         List<User> users = new ArrayList<>();
         List<UserDto> userDtoList = new ArrayList<>();
-            users = userDao.getAllUser();
-            if(users != null){
-                userDtoList = users.stream()
-                        .map(user -> toUserDto(user))
-                        .collect(Collectors.toList());
-            }
+        users = userDao.getAllUser();
+        if (users != null) {
+            userDtoList = users.stream()
+                    .map(user -> toUserDto(user))
+                    .collect(Collectors.toList());
+        }
         return userDtoList;
     }
 
@@ -44,15 +44,15 @@ public class ServiceUserImpl implements ServiceUser{
         User user;
         UserDto userDto = new UserDto();
 
-            user = userDao.getUserById(id);
-            if (user!=null) {
-                userDto = toUserDto(user);
-            }
+        user = userDao.getUserById(id);
+        if (user != null) {
+            userDto = toUserDto(user);
+        }
 
         return userDto;
     }
 
-    private UserDto toUserDto(User user){
+    private UserDto toUserDto(User user) {
         UserDto userDto = new UserDto();
         AdressDto adressDto = new AdressDto();
 
@@ -99,7 +99,7 @@ public class ServiceUserImpl implements ServiceUser{
     }
 
     private SexDto toSexDto(Sex sex) {
-       return sex.name().equals("MAN") ? SexDto.MAN : SexDto.WOMAN;
+        return sex.name().equals("MAN") ? SexDto.MAN : SexDto.WOMAN;
     }
 
     private Sex toSex(SexDto sexDto) {
@@ -108,7 +108,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     private RoleDto toRoleDto(Role role) {
         RoleDto roleDto;
-        switch (role.name()){
+        switch (role.name()) {
             case ("ADMIN"):
                 roleDto = RoleDto.ADMIN;
                 break;
@@ -124,7 +124,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     private Role toRole(RoleDto roleDto) {
         Role role;
-        switch (roleDto.name()){
+        switch (roleDto.name()) {
             case ("ADMIN"):
                 role = Role.ADMIN;
                 break;
@@ -150,7 +150,7 @@ public class ServiceUserImpl implements ServiceUser{
 
     @Override
     public UserDto updateUserDto(UserDto user) throws SQLException {
-        loger.log(Level.DEBUG,"");
+        loger.log(Level.DEBUG, "");
         UserDto userDto = new UserDto();
         User user1 = toUser(user);
         userDto = toUserDto(userDao.updateUser(user1));

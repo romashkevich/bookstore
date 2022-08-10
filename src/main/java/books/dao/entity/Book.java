@@ -12,7 +12,7 @@ public class Book {
     private String cover;
     private BigDecimal price;
 
-    public Book(){
+    public Book() {
 
     }
 

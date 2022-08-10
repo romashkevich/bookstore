@@ -4,27 +4,17 @@ import books.dao.entity.Book;
 import books.service.ServiceBook;
 import books.service.ServiceBookImpl;
 import books.service.dto.BookDto;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-@WebServlet("/book")
-public class AppId extends HttpServlet{
+
+public class App {
 
     private static final ServiceBook SERVICE_BOOK = new ServiceBookImpl();
     private static final Logger logger = LogManager.getRootLogger();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         boolean process = true;
         while (process) {
             System.out.println("conditon : all, id, create, update, delete, isbn, author, count or exit (for exit program)");
@@ -89,6 +79,7 @@ public class AppId extends HttpServlet{
         }
 
     }
+
     private static Book getBook() {
         Book book = new Book();
         System.out.println("input book data");
@@ -98,7 +89,7 @@ public class AppId extends HttpServlet{
         book.setIsbn(isbn.nextLine());
 
         System.out.println("title");
-        Scanner title= new Scanner(System.in);
+        Scanner title = new Scanner(System.in);
         book.setTitle(title.nextLine());
 
         System.out.println("author");
@@ -118,12 +109,13 @@ public class AppId extends HttpServlet{
         book.setPrice(price.nextBigDecimal());
         return book;
     }
-    private static Book setBookDto(Book book){
+
+    private static Book setBookDto(Book book) {
         Book book1 = book;
         System.out.println("input book data");
 
         System.out.println("title");
-        Scanner title= new Scanner(System.in);
+        Scanner title = new Scanner(System.in);
         book1.setTitle(title.nextLine());
 
         System.out.println("author");
@@ -153,7 +145,7 @@ public class AppId extends HttpServlet{
         book.setIsbn(isbn.nextLine());
 
         System.out.println("title");
-        Scanner title= new Scanner(System.in);
+        Scanner title = new Scanner(System.in);
         book.setTitle(title.nextLine());
 
         System.out.println("author");
@@ -173,12 +165,13 @@ public class AppId extends HttpServlet{
         book.setPrice(price.nextBigDecimal());
         return book;
     }
-    private static BookDto setBookDto(BookDto book){
+
+    private static BookDto setBookDto(BookDto book) {
         BookDto book1 = book;
         System.out.println("input book data");
 
         System.out.println("title");
-        Scanner title= new Scanner(System.in);
+        Scanner title = new Scanner(System.in);
         book1.setTitle(title.nextLine());
 
         System.out.println("author");
@@ -199,22 +192,6 @@ public class AppId extends HttpServlet{
         return book1;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long id = Long.valueOf(req.getParameter("id"));
-        resp.setStatus(200);
-        resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
-        try {
-            BookDto bookDto = new BookDto();
-            bookDto = SERVICE_BOOK.getBookDtoById(id);
-            out.write("<h1>Book</h1>");
-            out.write("<div>"+bookDto+"</div>");
-
-        } catch (Exception e) {
-            out.write("<div>"+e+"</div>");
-        }
-    }
 }
 
 

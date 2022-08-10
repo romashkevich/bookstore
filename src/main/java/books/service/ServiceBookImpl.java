@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ServiceBookImpl implements ServiceBook{
+public class ServiceBookImpl implements ServiceBook {
     private final BookDaoJdbcImpl bookDao = new BookDaoJdbcImpl();
     private static final Logger loger = LogManager.getLogger("run main.books.service method");
 
@@ -27,43 +27,43 @@ public class ServiceBookImpl implements ServiceBook{
 
     @Override
     public BookDto getBookDtoById(Long id) throws SQLException {
-            loger.debug("");
-            Book book = bookDao.getBookById(id);
-            BookDto bookDto = toBookDto(book);
-            return bookDto;
+        loger.debug("");
+        Book book = bookDao.getBookById(id);
+        BookDto bookDto = toBookDto(book);
+        return bookDto;
     }
 
-        private BookDto toBookDto(Book book) {
-            BookDto bookDto = new BookDto();
-            bookDto.setId(book.getId());
-            bookDto.setAuthor(book.getAuthor());
-            bookDto.setIsbn(book.getIsbn());
-            bookDto.setTitle(book.getTitle());
-            bookDto.setCover(book.getCover());
-            bookDto.setPrice(book.getPrice());
-            return bookDto;
-        }
+    private BookDto toBookDto(Book book) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setAuthor(book.getAuthor());
+        bookDto.setIsbn(book.getIsbn());
+        bookDto.setTitle(book.getTitle());
+        bookDto.setCover(book.getCover());
+        bookDto.setPrice(book.getPrice());
+        return bookDto;
+    }
 
-        private Book toBook(BookDto bookDto) {
-            Book book = new Book();
-            book.setIsbn(bookDto.getIsbn());
-            book.setPrice(bookDto.getPrice());
-            book.setAuthor(bookDto.getAuthor());
-            book.setPages(bookDto.getPages());
-            book.setId(bookDto.getId());
-            book.setTitle(bookDto.getTitle());
-            book.setCover(bookDto.getCover());
-            return book;
-        }
+    private Book toBook(BookDto bookDto) {
+        Book book = new Book();
+        book.setIsbn(bookDto.getIsbn());
+        book.setPrice(bookDto.getPrice());
+        book.setAuthor(bookDto.getAuthor());
+        book.setPages(bookDto.getPages());
+        book.setId(bookDto.getId());
+        book.setTitle(bookDto.getTitle());
+        book.setCover(bookDto.getCover());
+        return book;
+    }
 
     @Override
     public BookDto createBookDto(BookDto bookDto) throws Exception {
-            loger.debug("");
-            BookDto bDto;
-            Book book = toBook(bookDto);
-            Book bookExist = bookDao.createBook(book);
-            bDto = toBookDto(bookExist);
-            return bDto;
+        loger.debug("");
+        BookDto bDto;
+        Book book = toBook(bookDto);
+        Book bookExist = bookDao.createBook(book);
+        bDto = toBookDto(bookExist);
+        return bDto;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ServiceBookImpl implements ServiceBook{
         loger.debug("");
         Book book = bookDao.getBookByIsbn(isbn);
         BookDto bookDto = toBookDto(book);
-        return bookDto ;
+        return bookDto;
     }
 
     @Override
@@ -112,8 +112,8 @@ public class ServiceBookImpl implements ServiceBook{
         BigDecimal sumAll;
         double sum = 0;
         List<BookDto> books = getBookDtoByAuthor(author);
-        if (!books.isEmpty()){
-            for (BookDto bDto: books) {
+        if (!books.isEmpty()) {
+            for (BookDto bDto : books) {
                 sum = sum + bDto.getPrice().doubleValue();
             }
             sumAll = new BigDecimal(sum);
