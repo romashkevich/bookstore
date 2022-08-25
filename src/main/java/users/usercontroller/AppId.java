@@ -19,8 +19,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
-@WebServlet("/userId")
-public class AppId extends HttpServlet {
+
+public class AppId {
 
     private static final ServiceUser SERVICE_USER_ID = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();
@@ -245,20 +245,7 @@ public class AppId extends HttpServlet {
         return adressDto;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setStatus(200);
-        Long id = Long.valueOf(req.getParameter("id"));
-        resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
-        try {
-            UserDto userDto;
-            userDto = SERVICE_USER_ID.getUserDtoById(id);
-            out.write("<div>" + userDto + "</div>");
-        } catch (Exception e) {
-            out.write("<div>" + e + "</div>");
-        }
-    }
+
 }
 
 

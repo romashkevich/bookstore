@@ -32,8 +32,21 @@ public class AppAll extends HttpServlet {
             try {
                 List<BookDto> bookDtos = new ArrayList<>(SERVICE_BOOK_AppAll.getAllBooksDto());
                 if (!bookDtos.isEmpty()) {
-                    out.write("<img src=" + "images/emblema_13.jpg" + ">");
+                    out.write("<img src=" + "images/emblem.jpg" + ">");
+                    out.write("<style>" + " h1 { \n" +
+                            "    font-size: 36px;\n" +
+                            "    font-family: Verdana, Arial, Helvetica, sans-serif;\n" +
+                            "    color:red;\n" +
+                            "    text-align: center;\n" +
+                            "   }" + "</style>");
+
                     out.write("<h1>Books</h1>");
+
+                    out.write("<style>" + " a { \n" +
+                            "    font-size: 24px;\n" +
+                            "    color: #696969;\n" +
+                            "    text-align: center;\n" +
+                            "   }" + "</style>");
                     for (BookDto bDto : bookDtos) {
                         out.write("<a href=" + "http://localhost:8010/bookstore/book?id=" + bDto.getId() + ">" + bDto.getTitle() + "<br></a>");
                     }
@@ -47,7 +60,7 @@ public class AppAll extends HttpServlet {
         if (!(req.getParameter("id") == null)) {
             try {
                 Long idValue = Long.parseLong(req.getParameter("id"));
-                long count = (long)SERVICE_BOOK_AppAll.countAllBookDto();
+                long count = (long) SERVICE_BOOK_AppAll.countAllBookDto();
                 if (idValue >= 0 && idValue <= count) {
                     BookDto bookDto = SERVICE_BOOK_AppAll.getBookDtoById(idValue);
                     out.write("<h1>Book</h1>");

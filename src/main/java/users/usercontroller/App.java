@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/user")
-public class AppAll extends HttpServlet {
+public class App extends HttpServlet {
     private static final ServiceUser SERVICE_USER_ALL = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();
 
@@ -31,7 +31,7 @@ public class AppAll extends HttpServlet {
             try {
                 List<UserDto> userDtos = new ArrayList<>(SERVICE_USER_ALL.getAllUserDto());
                 if (!userDtos.isEmpty()) {
-                    out.write("<img src=" + "images/emblema_13.jpg" + ">");
+                    out.write("<img src=" + "images/emblem.jpg" + "/>");
                     out.write("<h1>Users</h1>");
                     for (UserDto uDto : userDtos) {
                         out.write("<a href=" + "http://localhost:8010/bookstore/user?id=" + uDto.getId() + ">" + uDto.getLogin() + "<br></a>");
