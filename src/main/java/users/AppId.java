@@ -1,4 +1,4 @@
-package users.usercontroller;
+package users;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

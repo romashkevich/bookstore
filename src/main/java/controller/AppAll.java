@@ -1,4 +1,4 @@
-package books.bookcontroller;
+package controller;
 
 import books.service.ServiceBook;
 import books.service.ServiceBookImpl;
@@ -23,34 +23,16 @@ public class AppAll extends HttpServlet {
     private static final ServiceBook SERVICE_BOOK_AppAll = new ServiceBookImpl();
     private static final Logger loggerAppAll = LogManager.getRootLogger();
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.setStatus(200);
         resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
         if (req.getParameter("id") == null) {
             try {
                 List<BookDto> bookDtos = new ArrayList<>(SERVICE_BOOK_AppAll.getAllBooksDto());
-                if (!bookDtos.isEmpty()) {
-                    out.write("<img src=" + "images/emblem.jpg" + ">");
-                    out.write("<style>" + " h1 { \n" +
-                            "    font-size: 36px;\n" +
-                            "    font-family: Verdana, Arial, Helvetica, sans-serif;\n" +
-                            "    color:red;\n" +
-                            "    text-align: center;\n" +
-                            "   }" + "</style>");
-
-                    out.write("<h1>Books</h1>");
-
-                    out.write("<style>" + " a { \n" +
-                            "    font-size: 24px;\n" +
-                            "    color: #696969;\n" +
-                            "    text-align: center;\n" +
-                            "   }" + "</style>");
-                    for (BookDto bDto : bookDtos) {
-                        out.write("<a href=" + "http://localhost:8010/bookstore/book?id=" + bDto.getId() + ">" + bDto.getTitle() + "<br></a>");
-                    }
-                }
+                req.setAttribute("books", bookDtos);
+                req.getRequestDispatcher("jsp/books.jsp").forward(req,resp);
             } catch (Exception e) {
                 resp.sendError(404, "not connect with db");
 
@@ -63,9 +45,8 @@ public class AppAll extends HttpServlet {
                 long count = (long) SERVICE_BOOK_AppAll.countAllBookDto();
                 if (idValue >= 0 && idValue <= count) {
                     BookDto bookDto = SERVICE_BOOK_AppAll.getBookDtoById(idValue);
-                    out.write("<h1>Book</h1>");
-                    out.write("");
-                    out.write("<div>" + bookDto + "</div>");
+                    req.setAttribute("book",bookDto);
+                    req.getRequestDispatcher("jsp/book.jsp").forward(req,resp);
                 } else {
                     throw new SQLException();
                 }
@@ -76,7 +57,6 @@ public class AppAll extends HttpServlet {
 
         }
 
-
     }
-
 }
+

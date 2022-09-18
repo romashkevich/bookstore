@@ -1,4 +1,4 @@
-package books.bookcontroller;
+package books;
 
 import books.dao.entity.Book;
 import books.service.ServiceBook;
