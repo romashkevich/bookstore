@@ -32,7 +32,7 @@ public class BookCommand implements Command {
                 }
 
             } catch (NumberFormatException | SQLException e) {
-                return "error.jsp";
+                return "jsp/error.jsp";
             }
 
 
