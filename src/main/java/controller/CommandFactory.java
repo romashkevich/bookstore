@@ -24,6 +24,7 @@ public class CommandFactory {
         map.put("users", new UsersCommand());
         map.put("error", new ErrorCommand());
         map.put("create", new CreateCommand());
+        map.put("delete", new DeleteCommand());
     }
 
     public Command getCommand(String action) {

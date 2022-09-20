@@ -12,8 +12,7 @@
     </style>
 </head>
 <body>
-    <h1>ERROR</h1>
-    <div> maybe error in bd or server was capituliren </div>
+    <h1>ERROR/h1>
     <div>${message}</div>
 </body>
 </html>

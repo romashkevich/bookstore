@@ -77,9 +77,9 @@ public class ServiceBookImpl implements ServiceBook {
     }
 
     @Override
-    public void deleteBookDto(Long id) throws SQLException {
+    public Boolean deleteBookDto(Long id) throws SQLException {
         loger.debug("");
-        bookDao.deleteBook(id);
+        return bookDao.deleteBook(id);
     }
 
     @Override
