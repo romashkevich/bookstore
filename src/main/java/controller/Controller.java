@@ -22,6 +22,12 @@ public class Controller extends HttpServlet {
         req.getRequestDispatcher(page).forward(req,resp);
     }
 
-
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("command");
+        Command command = CommandFactory.getInstance().getCommand(action);
+        String page = command.execute(req);
+        req.getRequestDispatcher(page).forward(req,resp);
+    }
 }
 
