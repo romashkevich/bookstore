@@ -50,7 +50,7 @@
         </Logger>
 
         <Logger name="request on bd"
-                level="debug"
+                level="info"
                 additivity="false">
             <AppenderRef ref="ConsoleAppenderDB"/>
         </Logger>

@@ -141,6 +141,7 @@ public class UserDaoJdbcImpl implements UserDao {
         statement.setLong(1, id);
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
+
             user.setId(resultSet.getLong("id"));
             user.setLogin(resultSet.getString("login"));
             user.setPassword(resultSet.getString("pass"));

@@ -7,20 +7,22 @@ import books.service.dto.BookDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
-public class App {
+public class AppBook {
 
     private static final ServiceBook SERVICE_BOOK = new ServiceBookImpl();
     private static final Logger logger = LogManager.getRootLogger();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         boolean process = true;
         while (process) {
             System.out.println("conditon : all, id, create, update, delete, isbn, author, count or exit (for exit program)");
             Scanner in = new Scanner(System.in);
             String input = in.next().toLowerCase().trim();
             try {
+
                 switch (input) {
                     case "all":
                         System.out.println("list books: ");
@@ -77,6 +79,7 @@ public class App {
             }
 
         }
+
 
     }
 

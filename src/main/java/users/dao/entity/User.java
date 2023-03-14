@@ -3,7 +3,7 @@ package users.dao.entity;
 import java.util.Objects;
 
 public class User {
-    private long id;
+    private Long id;
     private String login;
     private String password;
     private Adress adress;
@@ -43,7 +43,7 @@ public class User {
         this.telNum = telNum;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

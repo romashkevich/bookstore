@@ -26,7 +26,7 @@ public class ServiceUserImpl implements ServiceUser {
 
     public List<UserDto> getAllUserDto() throws SQLException {
         loger.debug("");
-        List<User> users = new ArrayList<>();
+        List<User> users;
         List<UserDto> userDtoList = new ArrayList<>();
         users = userDao.getAllUser();
         if (users != null) {
@@ -65,8 +65,8 @@ public class ServiceUserImpl implements ServiceUser {
         userDto.setId(user.getId());
         userDto.setRoleDto(toRoleDto(user.getRoleClass()));
         userDto.setLogin(user.getLogin());
+        userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
-        userDto.setEmail(userDto.getEmail());
         userDto.setAdress(adressDto);
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
@@ -88,8 +88,8 @@ public class ServiceUserImpl implements ServiceUser {
         user.setId(userDto.getId());
         user.setRole(toRole(userDto.getRoleDtoClass()));
         user.setLogin(userDto.getLogin());
-        user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
         user.setAdress(adress);
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -204,7 +204,8 @@ public class ServiceUserImpl implements ServiceUser {
     public UserDto getUserDtoByLolin(String login) throws SQLException {
         loger.debug("");
         User user;
-        UserDto userDto = new UserDto();
+        new UserDto();
+        UserDto userDto;
         user = userDao.getUserByLogin(login);
         userDto = toUserDto(user);
         return userDto;

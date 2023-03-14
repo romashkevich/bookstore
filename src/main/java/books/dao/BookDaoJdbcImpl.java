@@ -63,7 +63,6 @@ public class BookDaoJdbcImpl implements Bookdao {
         statement.setLong(1, id);
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
-            book = new Book();
             book.setId(resultSet.getLong("id"));
             book.setIsbn(resultSet.getString("isbn"));
             book.setTitle(resultSet.getString("title"));
@@ -151,42 +150,50 @@ public class BookDaoJdbcImpl implements Bookdao {
 
     @Override
     public Book getBookByIsbn(String isbn) throws SQLException {
-        boolean result = isbn.matches("\\d{4}[-]{1}\\d{4}");
         Book book = new Book();
-        if (result) {
-            PreparedStatement statement = DbConfiguratorBooks.getConnectionBooks().prepareStatement(GET_BY_ISBN);
-            logger.debug("sql request on bd -->" + GET_BY_ISBN);
-            statement.setString(1, isbn);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                book = new Book();
-                book.setId(resultSet.getLong("id"));
-                book.setIsbn(resultSet.getString("isbn"));
-                book.setTitle(resultSet.getString("title"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setPages(resultSet.getInt("pages"));
-                book.setCover(resultSet.getString("cover"));
-                book.setPrice(resultSet.getBigDecimal("price"));
-                return book;
+        try {
+            boolean result = isbn.matches("\\d{4}[-]{1}\\d{4}");
+            if (result) {
+                PreparedStatement statement = DbConfiguratorBooks.getConnectionBooks().prepareStatement(GET_BY_ISBN);
+                logger.debug("sql request on bd -->" + GET_BY_ISBN);
+                statement.setString(1, isbn);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    book.setId(resultSet.getLong("id"));
+                    book.setIsbn(resultSet.getString("isbn"));
+                    book.setTitle(resultSet.getString("title"));
+                    book.setAuthor(resultSet.getString("author"));
+                    book.setPages(resultSet.getInt("pages"));
+                    book.setCover(resultSet.getString("cover"));
+                    book.setPrice(resultSet.getBigDecimal("price"));
+                    return book;
+                }
             }
-        } else {
-            System.out.println("isbn is not correct");
+
+        } catch (SQLException e) {
+            throw new SQLException();
         }
         return book;
     }
 
+
     @Override
-    public List<Book> getBookByAuthor(String author) throws SQLException {
-        List<Book> books = getAllBooks();
+    public List<Book> getBookByAuthor(String author){
         List<Book> booksByAuthor = new ArrayList<>();
-        for (Book book : books) {
-            String input = book.getAuthor().toLowerCase();// строка в которой ищут
-            Pattern pattern = Pattern.compile(author.toLowerCase() + "\\s*\\w*"); // поиск совпадений
-            Matcher matcher = pattern.matcher(input);
-            while (matcher.find()) {
-                booksByAuthor.add(book);
-                System.out.println(book);
+        try {
+            List<Book> books = getAllBooks();
+            for (Book book : books) {
+                String input = book.getAuthor().toLowerCase();// строка в которой ищут
+                Pattern pattern = Pattern.compile(author.toLowerCase() + "\\s*\\w*"); // поиск совпадений
+                Matcher matcher = pattern.matcher(input);
+                while (matcher.find()) {
+                    booksByAuthor.add(book);
+                    System.out.println(book);
+                }
+                return booksByAuthor;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
         return booksByAuthor;
     }

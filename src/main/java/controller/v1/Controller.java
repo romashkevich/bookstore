@@ -1,4 +1,4 @@
-package controller;
+package controller.v1;
 
 //
 // enum map вложенный класс мап // патерны проектирования синглтон фабрика
@@ -20,6 +20,8 @@ public class Controller extends HttpServlet {
         Command command = CommandFactory.getInstance().getCommand(action);
         String page = command.execute(req);
         req.getRequestDispatcher(page).forward(req,resp);
+
+
     }
 
     @Override

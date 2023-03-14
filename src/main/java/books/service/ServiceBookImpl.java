@@ -17,7 +17,7 @@ public class ServiceBookImpl implements ServiceBook {
     private static final Logger loger = LogManager.getLogger("run main.books.service method");
 
     @Override
-    public Collection<? extends BookDto> getAllBooksDto() throws SQLException {
+    public List<? extends BookDto> getAllBooksDto() throws SQLException {
         loger.debug("");
         List<BookDto> bookDtos = bookDao.getAllBooks().stream()
                 .map(entity -> toBookDto(entity))
@@ -39,6 +39,7 @@ public class ServiceBookImpl implements ServiceBook {
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
         bookDto.setTitle(book.getTitle());
+        bookDto.setPages(book.getPages());
         bookDto.setCover(book.getCover());
         bookDto.setPrice(book.getPrice());
         return bookDto;

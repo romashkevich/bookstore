@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/book")
+@WebServlet("/app111")
 public class AppAll extends HttpServlet {
     private static final ServiceBook SERVICE_BOOK_AppAll = new ServiceBookImpl();
     private static final Logger loggerAppAll = LogManager.getRootLogger();

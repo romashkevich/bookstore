@@ -1,4 +1,4 @@
-package controller;
+package controller.v1;
 
 import books.service.ServiceBook;
 import books.service.ServiceBookImpl;
@@ -6,7 +6,6 @@ import books.service.dto.BookDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.math.BigDecimal;
-import java.util.Scanner;
 
 public class CreateCommand implements Command {
     private static final ServiceBook SERVICE_BOOK_AppAll = new ServiceBookImpl();

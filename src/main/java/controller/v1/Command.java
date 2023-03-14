@@ -1,4 +1,4 @@
-package controller;
+package controller.v1;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

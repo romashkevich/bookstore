@@ -39,15 +39,10 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
@@ -64,7 +59,6 @@
                 <configuration>
                     <warName>bookstore</warName>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <!--suppress UnresolvedMavenProperty -->
                     <outputDirectory>/Users/anna/Desktop/kostia/JAVA/programm/apache-tomcat-10.0.21/webapps</outputDirectory>
                 </configuration>
             </plugin>

@@ -1,10 +1,5 @@
 package users;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import users.service.ServiceUser;
@@ -14,13 +9,11 @@ import users.service.dto.RoleDto;
 import users.service.dto.SexDto;
 import users.service.dto.UserDto;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
 
-public class AppId {
+public class AppUser {
 
     private static final ServiceUser SERVICE_USER_ID = new ServiceUserImpl();
     private static final Logger root = LogManager.getRootLogger();

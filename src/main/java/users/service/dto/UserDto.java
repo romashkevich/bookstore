@@ -3,7 +3,7 @@ package users.service.dto;
 import java.util.Objects;
 
 public class UserDto {
-    private long id;
+    private Long id;
     private String login;
     private String password;
     private AdressDto adress;
@@ -55,7 +55,7 @@ public class UserDto {
         this.roleDto = roleDto;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
