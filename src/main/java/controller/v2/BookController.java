@@ -32,15 +32,18 @@ public class BookController extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         ServiceBook serviceBook = new ServiceBookImpl();
         PrintWriter out = resp.getWriter();
-        out.print(in);
-        out.print(in2);
+        out.write(in);
+        out.write(in2);
 
         try {
 
             if (in.equals(id)) {
                 BookDto bookDto = serviceBook.getBookDtoById(Long.parseLong(in2));
                 if (bookDto.getId() != null) {
-                    out.print(bookDto);
+                    req.setAttribute("book",bookDto);
+                    req.getRequestDispatcher("jsp/bookv.jsp").forward(req, resp);
+                    out.write("<br></br>");
+                    out.write(bookDto.getAuthor());
                 } else {
                     throw new IOException();
                 }
@@ -48,6 +51,8 @@ public class BookController extends HttpServlet {
             if (in.equals(isbn)) {
                 BookDto bookDto = serviceBook.getBookDtoByIsbn(in2);
                 if (bookDto.getId() != null) {
+                    req.setAttribute("book",bookDto);
+                    req.getRequestDispatcher("jsp/bookv.jsp").forward(req, resp);
                     out.print(bookDto);
                 } else {
                     throw new IOException();

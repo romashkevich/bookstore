@@ -24,14 +24,11 @@ public class BooksController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = resp.getWriter();
         try {
             List<BookDto> bookDtos = (List<BookDto>) serviceBook.getAllBooksDto();
             if (!bookDtos.isEmpty()) {
-                for (BookDto bd : bookDtos) {
-                    out.print(bd);
-                    out.print("<br></br>");
-                }
+                req.setAttribute("books",bookDtos);
+                req.getRequestDispatcher("jsp/booksv.jsp").forward(req,resp);
             } else throw new IOException();
 
         } catch (Exception e) {
